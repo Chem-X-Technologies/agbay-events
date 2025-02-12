@@ -1,6 +1,11 @@
 import '~/global.css';
 
-import { DarkTheme, DefaultTheme, Theme, ThemeProvider } from '@react-navigation/native';
+import {
+  DarkTheme,
+  DefaultTheme,
+  Theme,
+  ThemeProvider,
+} from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
@@ -8,8 +13,8 @@ import { Platform } from 'react-native';
 import { NAV_THEME } from '~/lib/constants';
 import { useColorScheme } from '~/lib/useColorScheme';
 import { PortalHost } from '@rn-primitives/portal';
-import { ThemeToggle } from '~/components/ThemeToggle';
 import { setAndroidNavigationBar } from '~/lib/android-navigation-bar';
+import CreateEventButton from '~/components/screens/events/CreateEventButton';
 
 const LIGHT_THEME: Theme = {
   ...DefaultTheme,
@@ -50,13 +55,26 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
-      <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
+      {/* <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} /> */}
       <Stack>
         <Stack.Screen
-          name='index'
+          name="events/index"
           options={{
-            title: 'Starter Base',
-            headerRight: () => <ThemeToggle />,
+            title: 'Events',
+            headerBackVisible: false,
+            headerRight: () => <CreateEventButton />,
+          }}
+        />
+        <Stack.Screen
+          name="events/create-event"
+          options={{
+            title: 'Create Event',
+          }}
+        />
+        <Stack.Screen
+          name="events/details/[id]"
+          options={{
+            title: 'Event Details',
           }}
         />
       </Stack>
@@ -66,4 +84,6 @@ export default function RootLayout() {
 }
 
 const useIsomorphicLayoutEffect =
-  Platform.OS === 'web' && typeof window === 'undefined' ? React.useEffect : React.useLayoutEffect;
+  Platform.OS === 'web' && typeof window === 'undefined'
+    ? React.useEffect
+    : React.useLayoutEffect;

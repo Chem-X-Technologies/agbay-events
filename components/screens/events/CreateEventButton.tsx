@@ -1,13 +1,20 @@
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import { Button } from '~/components/ui/button';
 import { Plus } from '~/lib/icons/Plus';
 
 export default function CreateEventButton() {
+  const router = useRouter();
   return (
-    <Link href="/events/create-event" asChild>
-      <Button size="icon" variant="ghost">
-        <Plus className="text-foreground" size={23} strokeWidth={2} />
-      </Button>
-    </Link>
+    // <Link asChild href="/events/create-event">
+    <Button
+      size="icon"
+      variant="ghost"
+      onPressOut={() => {
+        router.push('/events/create-event');
+      }}
+    >
+      <Plus className="text-foreground" size={23} strokeWidth={2} />
+    </Button>
+    // </Link>
   );
 }

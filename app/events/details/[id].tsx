@@ -1,6 +1,5 @@
 import { useLocalSearchParams } from 'expo-router';
 import { View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from '~/components/ui/button';
 import { Text } from '~/components/ui/text';
 import {
@@ -20,7 +19,7 @@ export default function EventDetailsScreen() {
   const event = MOCK_EVENTS.find((event) => event.id === id);
 
   return (
-    <SafeAreaView className="flex-1 justify-center items-center bg-secondary/30">
+    <View className="flex-1 justify-center items-center bg-secondary/30">
       <Card className="w-full p-2 max-w-sm rounded-2xl">
         <CardHeader className="items-center">
           <CardTitle className="text-center">{event?.name}</CardTitle>
@@ -84,7 +83,7 @@ export default function EventDetailsScreen() {
             indicatorClassName="bg-sky-600"
           /> */}
           <Button
-            variant="outline"
+            // variant="outline"
             className="shadow shadow-foreground/5"
             // onPress={updateProgressValue}
           >
@@ -92,6 +91,6 @@ export default function EventDetailsScreen() {
           </Button>
         </CardFooter>
       </Card>
-    </SafeAreaView>
+    </View>
   );
 }

@@ -1,14 +1,23 @@
 import { useForm } from 'react-hook-form';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Form, FormField, FormInput } from '~/components/ui/form';
+import {
+  Form,
+  FormDatePicker,
+  FormField,
+  FormInput,
+} from '~/components/ui/form';
 import { View } from 'react-native';
+import { Button } from '~/components/ui/button';
+import { Text } from '~/components/ui/text';
+import { MOCK_EVENTS } from '~/lib/constants';
+import { useRouter } from 'expo-router';
 
 const formSchema = z.object({
-  name: z.string({
+  name: z.string().min(1, {
     message: 'Please enter the event name',
   }),
+  date: z.string().min(1, { message: 'Please enter the event date' }),
 });
 
 export default function CreateEventScreen() {
@@ -18,9 +27,21 @@ export default function CreateEventScreen() {
       name: '',
     },
   });
+  const router = useRouter();
+
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    console.log(values);
+
+    // MOCK_EVENTS.push({
+    //   id: `${MOCK_EVENTS.length + 1}`,
+    //   name: values.name,
+    // });
+
+    // router.push('/');
+  };
 
   return (
-    <SafeAreaView className="flex-1">
+    <View className="flex-1 p-4 bg-secondary/30">
       <Form {...form}>
         <View className="gap-7">
           <FormField
@@ -28,8 +49,16 @@ export default function CreateEventScreen() {
             name="name"
             render={({ field }) => <FormInput label="Name" {...field} />}
           />
+          <FormField
+            control={form.control}
+            name="date"
+            render={({ field }) => <FormDatePicker label="Date" {...field} />}
+          />
+          <Button onPress={form.handleSubmit(onSubmit)}>
+            <Text>Submit</Text>
+          </Button>
         </View>
       </Form>
-    </SafeAreaView>
+    </View>
   );
 }

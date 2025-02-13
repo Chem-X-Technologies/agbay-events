@@ -55,13 +55,12 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
-      {/* <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} /> */}
+      <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
       <Stack>
         <Stack.Screen
-          name="events/index"
+          name="index"
           options={{
             title: 'Events',
-            headerBackVisible: false,
             headerRight: () => <CreateEventButton />,
           }}
         />

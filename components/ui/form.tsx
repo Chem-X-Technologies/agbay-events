@@ -12,16 +12,13 @@ import {
   Noop,
   useFormContext,
 } from 'react-hook-form';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import Animated, { FadeInDown, FadeOut } from 'react-native-reanimated';
-// import {
-//   BottomSheet,
-//   BottomSheetCloseTrigger,
-//   BottomSheetContent,
-//   BottomSheetOpenTrigger,
-//   BottomSheetView,
-// } from '../../components/deprecated-ui/bottom-sheet';
-// import { Calendar } from '../../components/deprecated-ui/calendar';
+import {
+  DatePickerAndroid,
+  DatePickerIos,
+  useDatePickerAndroid,
+} from './date-picker';
 // import {
 //   Combobox,
 //   ComboboxOption,
@@ -35,7 +32,7 @@ import { Label } from '~/components/ui/label';
 // import { Switch } from '../../components/ui/switch';
 // import { Textarea } from '../../components/ui/textarea';
 import { Calendar as CalendarIcon } from '~/lib/icons/Calendar';
-import { cn } from '../../lib/utils';
+import { cn, formatDate } from '../../lib/utils';
 import { Text } from './text';
 import { X } from '~/lib/icons/X';
 
@@ -368,103 +365,107 @@ FormInput.displayName = 'FormInput';
 
 // FormCheckbox.displayName = 'FormCheckbox';
 
-// const FormDatePicker = React.forwardRef<
-//   React.ElementRef<typeof Button>,
-//   FormItemProps<typeof Calendar, string>
-// >(({ label, description, value, onChange, ...props }, ref) => {
-//   const {
-//     error,
-//     formItemNativeID,
-//     formDescriptionNativeID,
-//     formMessageNativeID,
-//   } = useFormField();
+const DatePicker =
+  Platform.OS === 'android' ? DatePickerAndroid : DatePickerIos;
 
-//   return (
-//     <FormItem>
-//       {!!label && <FormLabel nativeID={formItemNativeID}>{label}</FormLabel>}
-//       <BottomSheet>
-//         <BottomSheetOpenTrigger asChild>
-//           <Button
-//             variant="outline"
-//             className="flex-row gap-3 justify-start px-3 relative"
-//             ref={ref}
-//             aria-labelledby={formItemNativeID}
-//             aria-describedby={
-//               !error
-//                 ? `${formDescriptionNativeID}`
-//                 : `${formDescriptionNativeID} ${formMessageNativeID}`
-//             }
-//             aria-invalid={!!error}
-//           >
-//             {({ pressed }) => (
-//               <>
-//                 <CalendarIcon
-//                   className={buttonTextVariants({
-//                     variant: 'outline',
-//                     className: cn(
-//                       !value && 'opacity-80',
-//                       pressed && 'opacity-60'
-//                     ),
-//                   })}
-//                   size={18}
-//                 />
-//                 <Text
-//                   className={buttonTextVariants({
-//                     variant: 'outline',
-//                     className: cn(
-//                       'font-normal',
-//                       !value && 'opacity-70',
-//                       pressed && 'opacity-50'
-//                     ),
-//                   })}
-//                 >
-//                   {value ? value : 'Pick a date'}
-//                 </Text>
-//                 {!!value && (
-//                   <Button
-//                     className="absolute right-0 active:opacity-70 native:pr-3"
-//                     variant="ghost"
-//                     onPress={() => {
-//                       onChange?.('');
-//                     }}
-//                   >
-//                     <X size={18} className="text-muted-foreground text-xs" />
-//                   </Button>
-//                 )}
-//               </>
-//             )}
-//           </Button>
-//         </BottomSheetOpenTrigger>
-//         <BottomSheetContent>
-//           <BottomSheetView hadHeader={false} className="pt-2">
-//             <Calendar
-//               style={{ height: 358 }}
-//               onDayPress={(day) => {
-//                 onChange?.(day.dateString === value ? '' : day.dateString);
-//               }}
-//               markedDates={{
-//                 [value ?? '']: {
-//                   selected: true,
-//                 },
-//               }}
-//               current={value} // opens calendar on selected date
-//               {...props}
-//             />
-//             <View className={'pb-2 pt-4'}>
-//               <BottomSheetCloseTrigger asChild>
-//                 <Button>
-//                   <Text>Close</Text>
-//                 </Button>
-//               </BottomSheetCloseTrigger>
-//             </View>
-//           </BottomSheetView>
-//         </BottomSheetContent>
-//       </BottomSheet>
-//       {!!description && <FormDescription>{description}</FormDescription>}
-//       <FormMessage />
-//     </FormItem>
-//   );
-// });
+const FormDatePicker = React.forwardRef<
+  React.ElementRef<typeof Button>,
+  FormItemProps<typeof DatePicker, string>
+>(({ label, description, value, onChange, ...props }, ref) => {
+  const {
+    error,
+    formItemNativeID,
+    formDescriptionNativeID,
+    formMessageNativeID,
+  } = useFormField();
+
+  const [show, setShow] = React.useState(false);
+
+  const showDatePickerAndroid = useDatePickerAndroid({
+    value: !!value ? new Date(value) : new Date(),
+    onChange: (_, selectedDate) =>
+      onChange(selectedDate ? formatDateToISO(selectedDate) : ''),
+  });
+
+  const showDatePickerIos = () => setShow(true);
+
+  const showDatePicker =
+    Platform.OS === 'android' ? showDatePickerAndroid : showDatePickerIos;
+
+  const formatDateToISO = (date: Date): string => {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
+    const day = date.getDate().toString().padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  };
+
+  return (
+    <FormItem>
+      {!!label && <FormLabel nativeID={formItemNativeID}>{label}</FormLabel>}
+      <Button
+        variant="outline"
+        className="flex-row gap-3 justify-start px-3 relative"
+        ref={ref}
+        aria-labelledby={formItemNativeID}
+        aria-describedby={
+          !error
+            ? `${formDescriptionNativeID}`
+            : `${formDescriptionNativeID} ${formMessageNativeID}`
+        }
+        aria-invalid={!!error}
+        onPress={showDatePicker}
+      >
+        {({ pressed }) => (
+          <>
+            <CalendarIcon
+              className={buttonTextVariants({
+                variant: 'outline',
+                className: cn(!value && 'opacity-80', pressed && 'opacity-60'),
+              })}
+              size={18}
+            />
+            <Text
+              className={buttonTextVariants({
+                variant: 'outline',
+                className: cn(
+                  'font-normal',
+                  !value && 'opacity-70',
+                  pressed && 'opacity-50'
+                ),
+              })}
+            >
+              {value ? formatDate(value) : 'Pick a date'}
+            </Text>
+            {!!value && (
+              <Button
+                className="absolute right-0 active:opacity-70 native:pr-3"
+                variant="ghost"
+                onPress={() => {
+                  onChange?.('');
+                }}
+              >
+                <X size={18} className="text-muted-foreground text-xs" />
+              </Button>
+            )}
+          </>
+        )}
+      </Button>
+      {Platform.OS === 'ios' && (
+        <DatePickerIos
+          show={show}
+          value={!!value ? new Date(value) : new Date()}
+          onChange={(_, selectedDate) => {
+            onChange(selectedDate ? formatDateToISO(selectedDate) : '');
+            setShow(false);
+          }}
+        />
+      )}
+      {!!description && <FormDescription>{description}</FormDescription>}
+      <FormMessage />
+    </FormItem>
+  );
+});
 
 // FormDatePicker.displayName = 'FormDatePicker';
 
@@ -669,7 +670,7 @@ export {
   Form,
   // FormCheckbox,
   // FormCombobox,
-  // FormDatePicker,
+  FormDatePicker,
   FormDescription,
   FormField,
   FormInput,

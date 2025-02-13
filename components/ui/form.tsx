@@ -38,7 +38,7 @@ import { Label } from '~/components/ui/label';
 // import { Textarea } from '../../components/ui/textarea';
 import { Calendar as CalendarIcon } from '~/lib/icons/Calendar';
 import { Clock as ClockIcon } from '~/lib/icons/Clock';
-import { cn, formatDate } from '../../lib/utils';
+import { cn, formatDate, formatTime } from '../../lib/utils';
 import { Text } from './text';
 import { X } from '~/lib/icons/X';
 import Override from '~/lib/types/override';
@@ -597,7 +597,7 @@ const FormTimePicker = React.forwardRef<
                 ),
               })}
             >
-              {value || 'Pick a time'}
+              {value ? formatTime(value) : 'Pick a time'}
             </Text>
             {!!value && (
               <Button

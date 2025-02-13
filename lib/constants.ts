@@ -39,4 +39,37 @@ export const MOCK_EVENTS: AgbayEvent[] = [
     venue: 'Nijaga Park',
     ticketPrice: 499,
   },
+  {
+    id: '3',
+    name: 'Yana nga Event',
+    date: '2025-02-13',
+    time: '18:00',
+    venue: 'Cafe Buenaventura',
+    ticketPrice: 399,
+    description: 'Outdoor Movie Night',
+    contactPerson: 'Ms. Irene Anne Bendo',
+    contactNumber: '(0935) 017 4871'
+  },
+  {
+    id: '4',
+    name: 'Sadto nga Event',
+    date: '2025-01-05',
+    time: '18:00',
+    venue: 'Cafe Buenaventura',
+    ticketPrice: 399,
+    description: 'Outdoor Movie Night',
+    contactPerson: 'Ms. Irene Anne Bendo',
+    contactNumber: '(0935) 017 4871'
+  },
+  {
+    id: '4',
+    name: 'Sadto nga Event 2',
+    date: '2025-02-03',
+    time: '18:00',
+    venue: 'Cafe Buenaventura',
+    ticketPrice: 399,
+    description: 'Outdoor Movie Night',
+    contactPerson: 'Ms. Irene Anne Bendo',
+    contactNumber: '(0935) 017 4871'
+  },
 ]

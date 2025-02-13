@@ -21,7 +21,7 @@ export function TimePickerIos({
       mode="time"
       value={!!value ? new Date(value) : new Date()}
       onChange={(_, selectedDate) =>
-        onChange(selectedDate ? formatTimeTo12Hour(selectedDate) : '')
+        onChange(selectedDate ? formatTimeTo24Hour(selectedDate) : '')
       }
       {...props}
     />
@@ -43,7 +43,7 @@ export function useTimePickerAndroid({
     DateTimePickerAndroid.open({
       value: !!value ? new Date(value) : new Date(),
       onChange: (_, selectedDate) =>
-        onChange(selectedDate ? formatTimeTo12Hour(selectedDate) : ''),
+        onChange(selectedDate ? formatTimeTo24Hour(selectedDate) : ''),
       mode: 'time',
       ...props,
     });
@@ -52,12 +52,9 @@ export function useTimePickerAndroid({
   return showTimePickerAndroid;
 }
 
-export const formatTimeTo12Hour = (date: Date): string => {
-  let hours = date.getHours();
+export const formatTimeTo24Hour = (date: Date): string => {
+  const hours = date.getHours().toString().padStart(2, '0');
   const minutes = date.getMinutes().toString().padStart(2, '0');
-  const period = hours >= 12 ? 'PM' : 'AM';
 
-  hours = hours % 12 || 12; // Convert to 12-hour format
-
-  return `${hours}:${minutes} ${period}`;
+  return `${hours}:${minutes}`;
 };

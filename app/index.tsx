@@ -5,6 +5,7 @@ import EventListHeader from '~/components/screens/events/EventListHeader';
 import { Separator } from '~/components/ui/separator';
 import { MOCK_EVENTS } from '~/lib/constants';
 import AgbayEvent from '~/lib/types/agbay-event';
+import FlashListEmpty from '~/components/shared/FlashListEmpty';
 
 export default function EventsScreen() {
   const events = groupAndSortEvents(MOCK_EVENTS);
@@ -39,6 +40,7 @@ export default function EventsScreen() {
         }}
         ItemSeparatorComponent={() => <Separator />}
         estimatedItemSize={59}
+        ListEmptyComponent={<FlashListEmpty text="No events yet" />}
       />
     </View>
   );

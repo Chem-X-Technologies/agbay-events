@@ -1,4 +1,5 @@
 import AgbayEvent from "./types/agbay-event";
+import { AttendeeStatus } from "./types/attendee";
 
 export const NAV_THEME = {
   light: {
@@ -29,7 +30,27 @@ export const MOCK_EVENTS: AgbayEvent[] = [
     ticketPrice: 399,
     description: 'Outdoor Movie Night',
     contactPerson: 'Ms. Irene Anne Bendo',
-    contactNumber: '(0935) 017 4871'
+    contactNumber: '(0935) 017 4871',
+    attendees: [
+      {
+        id: '1',
+        name: 'John Doe',
+        status: AttendeeStatus.Waiting,
+        ticketCount: 5,
+      },
+      {
+        id: '2',
+        name: 'Bruno Mars',
+        status: AttendeeStatus.NoShow,
+        ticketCount: 10,
+      },
+      {
+        id: '3',
+        name: 'Sabrina Carpenter',
+        status: AttendeeStatus.Attended,
+        ticketCount: 2,
+      }
+    ],
   },
   {
     id: '2',
@@ -38,6 +59,7 @@ export const MOCK_EVENTS: AgbayEvent[] = [
     time: '16:00',
     venue: 'Nijaga Park',
     ticketPrice: 499,
+    attendees: [],
   },
   {
     id: '3',
@@ -48,7 +70,8 @@ export const MOCK_EVENTS: AgbayEvent[] = [
     ticketPrice: 399,
     description: 'Outdoor Movie Night',
     contactPerson: 'Ms. Irene Anne Bendo',
-    contactNumber: '(0935) 017 4871'
+    contactNumber: '(0935) 017 4871',
+    attendees: [],
   },
   {
     id: '4',
@@ -59,7 +82,8 @@ export const MOCK_EVENTS: AgbayEvent[] = [
     ticketPrice: 399,
     description: 'Outdoor Movie Night',
     contactPerson: 'Ms. Irene Anne Bendo',
-    contactNumber: '(0935) 017 4871'
+    contactNumber: '(0935) 017 4871',
+    attendees: [],
   },
   {
     id: '4',
@@ -70,6 +94,7 @@ export const MOCK_EVENTS: AgbayEvent[] = [
     ticketPrice: 399,
     description: 'Outdoor Movie Night',
     contactPerson: 'Ms. Irene Anne Bendo',
-    contactNumber: '(0935) 017 4871'
+    contactNumber: '(0935) 017 4871',
+    attendees: [],
   },
 ]

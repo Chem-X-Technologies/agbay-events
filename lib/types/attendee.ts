@@ -6,7 +6,7 @@ type Attendee = {
 }
 
 export enum AttendeeStatus {
-  Waiting = 'Waiting',
+  ForAttendance = 'For Attendance',
   Attended = 'Attended',
   NoShow = 'No Show',
 }

@@ -35,7 +35,7 @@ export const MOCK_EVENTS: AgbayEvent[] = [
       {
         id: '1',
         name: 'John Doe',
-        status: AttendeeStatus.Waiting,
+        status: AttendeeStatus.ForAttendance,
         ticketCount: 5,
       },
       {

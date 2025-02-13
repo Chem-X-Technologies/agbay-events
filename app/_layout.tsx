@@ -77,6 +77,12 @@ export default function RootLayout() {
             title: 'Event Details',
           }}
         />
+        <Stack.Screen
+          name="attendees/create-attendee"
+          options={{
+            title: 'Log Ticket Sale',
+          }}
+        />
       </Stack>
       <PortalHost />
     </ThemeProvider>

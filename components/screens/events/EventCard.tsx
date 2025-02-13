@@ -56,8 +56,8 @@ export default function EventCard({ event }: { event: AgbayEvent }) {
           )}
         </View>
       </CardContent>
-      <CardFooter className="flex-col gap-3">
-        {/* <View className="flex-row items-center overflow-hidden">
+      {/*<CardFooter className="flex-col gap-3">
+         <View className="flex-row items-center overflow-hidden">
             <Text className="text-sm text-muted-foreground">Productivity:</Text>
             <LayoutAnimationConfig skipEntering>
               <Animated.View
@@ -71,19 +71,19 @@ export default function EventCard({ event }: { event: AgbayEvent }) {
                 </Text>
               </Animated.View>
             </LayoutAnimationConfig>
-          </View> */}
+          </View> 
         {/* <Progress
             value={progress}
             className="h-2"
             indicatorClassName="bg-sky-600"
-          /> */}
-        <Button
+          /> 
+         <Button
           className="shadow shadow-foreground/5"
-          // onPress={updateProgressValue}
+          onPress={updateProgressValue}
         >
           <Text>Log Ticket Sale</Text>
-        </Button>
-      </CardFooter>
+        </Button> 
+      </CardFooter>*/}
     </Card>
   );
 }

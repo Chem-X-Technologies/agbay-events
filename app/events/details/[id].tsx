@@ -15,7 +15,7 @@ export default function EventDetailsScreen() {
   return (
     <View className="flex-1 p-4 items-center bg-secondary/30 gap-4">
       <EventCard event={event} />
-      <EventAttendeesList attendees={event.attendees} />
+      <EventAttendeesList eventId={event.id} attendees={event.attendees} />
     </View>
   );
 }

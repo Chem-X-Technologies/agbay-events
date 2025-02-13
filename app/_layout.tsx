@@ -61,6 +61,7 @@ export default function RootLayout() {
           name="index"
           options={{
             title: 'Events',
+            headerBackVisible: false,
             headerRight: () => <CreateEventButton />,
           }}
         />

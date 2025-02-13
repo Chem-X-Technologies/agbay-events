@@ -199,7 +199,7 @@ type FormItemProps<T extends React.ElementType<any>, U> = Override<
 
 const FormInput = React.forwardRef<
   React.ElementRef<typeof Input>,
-  FormItemProps<typeof Input, string>
+  FormItemProps<typeof Input, string | undefined>
 >(({ label, description, onChange, ...props }, ref) => {
   const inputRef = React.useRef<React.ComponentRef<typeof Input>>(null);
   const {
@@ -258,6 +258,77 @@ const FormInput = React.forwardRef<
 });
 
 FormInput.displayName = 'FormInput';
+
+const FormInputNumber = React.forwardRef<
+  React.ElementRef<typeof Input>,
+  FormItemProps<typeof Input, number>
+>(({ label, description, onChange, value, keyboardType, ...props }, ref) => {
+  const inputRef = React.useRef<React.ComponentRef<typeof Input>>(null);
+  const {
+    error,
+    formItemNativeID,
+    formDescriptionNativeID,
+    formMessageNativeID,
+  } = useFormField();
+
+  React.useImperativeHandle(
+    ref,
+    () => {
+      if (!inputRef.current) {
+        return {} as React.ComponentRef<typeof Input>;
+      }
+      return inputRef.current;
+    },
+    [inputRef.current]
+  );
+
+  function handleOnLabelPress() {
+    if (!inputRef.current) {
+      return;
+    }
+    if (inputRef.current.isFocused()) {
+      inputRef.current?.blur();
+    } else {
+      inputRef.current?.focus();
+    }
+  }
+
+  function sanitizeNumberString(numberString: string) {
+    return numberString.replace(/[, \-]/g, '');
+  }
+
+  return (
+    <FormItem>
+      {!!label && (
+        <FormLabel nativeID={formItemNativeID} onPress={handleOnLabelPress}>
+          {label}
+        </FormLabel>
+      )}
+
+      <Input
+        ref={inputRef}
+        aria-labelledby={formItemNativeID}
+        aria-describedby={
+          !error
+            ? `${formDescriptionNativeID}`
+            : `${formDescriptionNativeID} ${formMessageNativeID}`
+        }
+        aria-invalid={!!error}
+        defaultValue={`${value}`}
+        onChangeText={(newValue) => {
+          const sanitizedValue = sanitizeNumberString(newValue);
+          onChange(!isNaN(Number(sanitizedValue)) ? Number(sanitizedValue) : 0);
+        }}
+        keyboardType={keyboardType ?? 'numeric'}
+        {...props}
+      />
+      {!!description && <FormDescription>{description}</FormDescription>}
+      <FormMessage />
+    </FormItem>
+  );
+});
+
+FormInputNumber.displayName = 'FormInputNumber';
 
 // const FormTextarea = React.forwardRef<
 //   React.ElementRef<typeof Textarea>,
@@ -526,7 +597,7 @@ const FormTimePicker = React.forwardRef<
                 ),
               })}
             >
-              {value ? formatDate(value) : 'Pick a date'}
+              {value || 'Pick a time'}
             </Text>
             {!!value && (
               <Button
@@ -766,6 +837,7 @@ export {
   FormDescription,
   FormField,
   FormInput,
+  FormInputNumber,
   FormItem,
   FormLabel,
   FormMessage,

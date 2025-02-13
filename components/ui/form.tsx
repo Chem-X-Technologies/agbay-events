@@ -19,6 +19,11 @@ import {
   DatePickerIos,
   useDatePickerAndroid,
 } from './date-picker';
+import {
+  TimePickerAndroid,
+  TimePickerIos,
+  useTimePickerAndroid,
+} from './time-picker';
 // import {
 //   Combobox,
 //   ComboboxOption,
@@ -32,9 +37,11 @@ import { Label } from '~/components/ui/label';
 // import { Switch } from '../../components/ui/switch';
 // import { Textarea } from '../../components/ui/textarea';
 import { Calendar as CalendarIcon } from '~/lib/icons/Calendar';
+import { Clock as ClockIcon } from '~/lib/icons/Clock';
 import { cn, formatDate } from '../../lib/utils';
 import { Text } from './text';
 import { X } from '~/lib/icons/X';
+import Override from '~/lib/types/override';
 
 const Form = FormProvider;
 
@@ -173,8 +180,6 @@ const FormMessage = React.forwardRef<
   );
 });
 FormMessage.displayName = 'FormMessage';
-
-type Override<T, U> = Omit<T, keyof U> & U;
 
 interface FormFieldFieldProps<T> {
   name: string;
@@ -382,23 +387,14 @@ const FormDatePicker = React.forwardRef<
   const [show, setShow] = React.useState(false);
 
   const showDatePickerAndroid = useDatePickerAndroid({
-    value: !!value ? new Date(value) : new Date(),
-    onChange: (_, selectedDate) =>
-      onChange(selectedDate ? formatDateToISO(selectedDate) : ''),
+    value,
+    onChange,
   });
 
   const showDatePickerIos = () => setShow(true);
 
   const showDatePicker =
     Platform.OS === 'android' ? showDatePickerAndroid : showDatePickerIos;
-
-  const formatDateToISO = (date: Date): string => {
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
-    const day = date.getDate().toString().padStart(2, '0');
-
-    return `${year}-${month}-${day}`;
-  };
 
   return (
     <FormItem>
@@ -454,9 +450,9 @@ const FormDatePicker = React.forwardRef<
       {Platform.OS === 'ios' && (
         <DatePickerIos
           show={show}
-          value={!!value ? new Date(value) : new Date()}
-          onChange={(_, selectedDate) => {
-            onChange(selectedDate ? formatDateToISO(selectedDate) : '');
+          value={value}
+          onChange={(newValue) => {
+            onChange(newValue);
             setShow(false);
           }}
         />
@@ -467,7 +463,102 @@ const FormDatePicker = React.forwardRef<
   );
 });
 
-// FormDatePicker.displayName = 'FormDatePicker';
+FormDatePicker.displayName = 'FormDatePicker';
+
+const TimePicker =
+  Platform.OS === 'android' ? TimePickerAndroid : TimePickerIos;
+
+const FormTimePicker = React.forwardRef<
+  React.ElementRef<typeof Button>,
+  FormItemProps<typeof TimePicker, string>
+>(({ label, description, value, onChange, ...props }, ref) => {
+  const {
+    error,
+    formItemNativeID,
+    formDescriptionNativeID,
+    formMessageNativeID,
+  } = useFormField();
+
+  const [show, setShow] = React.useState(false);
+
+  const showTimePickerAndroid = useTimePickerAndroid({
+    value,
+    onChange,
+  });
+
+  const showTimePickerIos = () => setShow(true);
+
+  const showTimePicker =
+    Platform.OS === 'android' ? showTimePickerAndroid : showTimePickerIos;
+
+  return (
+    <FormItem>
+      {!!label && <FormLabel nativeID={formItemNativeID}>{label}</FormLabel>}
+      <Button
+        variant="outline"
+        className="flex-row gap-3 justify-start px-3 relative"
+        ref={ref}
+        aria-labelledby={formItemNativeID}
+        aria-describedby={
+          !error
+            ? `${formDescriptionNativeID}`
+            : `${formDescriptionNativeID} ${formMessageNativeID}`
+        }
+        aria-invalid={!!error}
+        onPress={showTimePicker}
+      >
+        {({ pressed }) => (
+          <>
+            <ClockIcon
+              className={buttonTextVariants({
+                variant: 'outline',
+                className: cn(!value && 'opacity-80', pressed && 'opacity-60'),
+              })}
+              size={18}
+            />
+            <Text
+              className={buttonTextVariants({
+                variant: 'outline',
+                className: cn(
+                  'font-normal',
+                  !value && 'opacity-70',
+                  pressed && 'opacity-50'
+                ),
+              })}
+            >
+              {value ? formatDate(value) : 'Pick a date'}
+            </Text>
+            {!!value && (
+              <Button
+                className="absolute right-0 active:opacity-70 native:pr-3"
+                variant="ghost"
+                onPress={() => {
+                  onChange?.('');
+                }}
+              >
+                <X size={18} className="text-muted-foreground text-xs" />
+              </Button>
+            )}
+          </>
+        )}
+      </Button>
+      {Platform.OS === 'ios' && (
+        <TimePickerIos
+          show={show}
+          value={value}
+          onChange={(newValue) => {
+            onChange(newValue);
+            setShow(false);
+          }}
+        />
+      )}
+      {!!description && <FormDescription>{description}</FormDescription>}
+      <FormMessage />
+    </FormItem>
+  );
+});
+
+FormTimePicker.displayName = 'FormTimePicker';
 
 // const FormRadioGroup = React.forwardRef<
 //   React.ElementRef<typeof RadioGroup>,
@@ -671,6 +762,7 @@ export {
   // FormCheckbox,
   // FormCombobox,
   FormDatePicker,
+  FormTimePicker,
   FormDescription,
   FormField,
   FormInput,

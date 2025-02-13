@@ -1,7 +1,7 @@
 import { Link } from 'expo-router';
 import { View } from 'react-native';
 import { H3, Muted } from '~/components/ui/typography';
-import AgbayEvent from '~/lib/types/event';
+import AgbayEvent from '~/lib/types/agbay-event';
 import { formatDate, formatTime } from '~/lib/utils';
 
 export default function EventListItem({ event }: { event: AgbayEvent }) {

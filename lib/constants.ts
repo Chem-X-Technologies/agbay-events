@@ -1,4 +1,4 @@
-import AgbayEvent from "./types/event";
+import AgbayEvent from "./types/agbay-event";
 
 export const NAV_THEME = {
   light: {

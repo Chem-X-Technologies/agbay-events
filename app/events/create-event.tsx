@@ -6,6 +6,7 @@ import {
   FormDatePicker,
   FormField,
   FormInput,
+  FormTimePicker,
 } from '~/components/ui/form';
 import { View } from 'react-native';
 import { Button } from '~/components/ui/button';
@@ -18,6 +19,7 @@ const formSchema = z.object({
     message: 'Please enter the event name',
   }),
   date: z.string().min(1, { message: 'Please enter the event date' }),
+  time: z.string().min(1, { message: 'Please enter the event time' }),
 });
 
 export default function CreateEventScreen() {
@@ -53,6 +55,11 @@ export default function CreateEventScreen() {
             control={form.control}
             name="date"
             render={({ field }) => <FormDatePicker label="Date" {...field} />}
+          />
+          <FormField
+            control={form.control}
+            name="time"
+            render={({ field }) => <FormTimePicker label="Time" {...field} />}
           />
           <Button onPress={form.handleSubmit(onSubmit)}>
             <Text>Submit</Text>

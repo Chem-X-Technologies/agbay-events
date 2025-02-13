@@ -41,9 +41,11 @@ export function useTimePickerAndroid({
 }: Override<AndroidNativeProps, FormTimePickerProps>) {
   const showTimePickerAndroid = () => {
     DateTimePickerAndroid.open({
-      value: !!value ? new Date(value) : new Date(),
-      onChange: (_, selectedDate) =>
-        onChange(selectedDate ? formatTimeTo24Hour(selectedDate) : ''),
+      value: !!value ? new Date(`2025-01-01 ${value}`) : new Date(),
+      onChange: (_, selectedDate) => {
+        if (!selectedDate) return;
+        onChange(selectedDate ? formatTimeTo24Hour(selectedDate) : '');
+      },
       mode: 'time',
       ...props,
     });

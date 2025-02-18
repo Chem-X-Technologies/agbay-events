@@ -1,21 +1,28 @@
 import { useLocalSearchParams } from 'expo-router';
 import { View } from 'react-native';
-import { MOCK_EVENTS } from '~/lib/constants';
 import EventCard from '~/components/screens/events/EventCard';
 import EventAttendeesList from '~/components/screens/events/EventAttendeesList';
+import { getEventById } from '~/lib/services/eventService';
+import { useQuery } from '@tanstack/react-query';
+import LoadingSpinner from '~/components/shared/LoadingSpinner';
 
 export default function EventDetailsScreen() {
   const { id } = useLocalSearchParams();
-  const event = MOCK_EVENTS.find((event) => event.id === id);
+  const { data, isFetching } = useQuery({
+    queryKey: [`events/${id}`],
+    queryFn: () => getEventById(id as string),
+  });
 
-  if (!event) return <></>;
+  if (isFetching) return <LoadingSpinner />;
 
-  event.attendees.sort((a, b) => a.name.localeCompare(b.name));
+  if (!data) return <></>;
+
+  data.attendees.sort((a, b) => a.name.localeCompare(b.name));
 
   return (
-    <View className="flex-1 p-4 items-center bg-secondary/30 gap-4">
-      <EventCard event={event} />
-      <EventAttendeesList eventId={event.id} attendees={event.attendees} />
+    <View className="flex-1 p-4 items-center bg-secondary gap-4">
+      <EventCard event={data} />
+      <EventAttendeesList eventId={data.id} attendees={data.attendees} />
     </View>
   );
 }

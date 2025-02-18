@@ -3,12 +3,23 @@ import { View } from 'react-native';
 import EventListItem from '~/components/screens/events/EventListItem';
 import EventListHeader from '~/components/screens/events/EventListHeader';
 import { Separator } from '~/components/ui/separator';
-import { MOCK_EVENTS } from '~/lib/constants';
 import AgbayEvent from '~/lib/types/agbay-event';
 import FlashListEmpty from '~/components/shared/FlashListEmpty';
+import { getEvents } from '~/lib/services/eventService';
+import LoadingSpinner from '~/components/shared/LoadingSpinner';
+import { useQuery } from '@tanstack/react-query';
 
 export default function EventsScreen() {
-  const events = groupAndSortEvents(MOCK_EVENTS);
+  const { data, isFetching } = useQuery({
+    queryKey: ['events'],
+    queryFn: getEvents,
+  });
+
+  if (isFetching) {
+    return <LoadingSpinner />;
+  }
+
+  const events = groupAndSortEvents(data ?? []);
 
   const stickyHeaderIndices = events
     .map((item, index) => {
@@ -21,7 +32,7 @@ export default function EventsScreen() {
     .filter((item) => item !== null) as number[];
 
   return (
-    <View className="flex-1 bg-secondary/30">
+    <View className="flex-1 bg-secondary">
       <FlashList
         data={events}
         renderItem={({ item }) => {

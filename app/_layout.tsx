@@ -15,6 +15,7 @@ import { useColorScheme } from '~/lib/useColorScheme';
 import { PortalHost } from '@rn-primitives/portal';
 import { setAndroidNavigationBar } from '~/lib/android-navigation-bar';
 import CreateEventButton from '~/components/screens/events/CreateEventButton';
+import ReactQueryProvider from '~/components/providers/ReactQueryProvider';
 
 const LIGHT_THEME: Theme = {
   ...DefaultTheme,
@@ -56,34 +57,36 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
       <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
-      <Stack>
-        <Stack.Screen
-          name="index"
-          options={{
-            title: 'Events',
-            headerBackVisible: false,
-            headerRight: () => <CreateEventButton />,
-          }}
-        />
-        <Stack.Screen
-          name="events/create-event"
-          options={{
-            title: 'Create Event',
-          }}
-        />
-        <Stack.Screen
-          name="events/details/[id]"
-          options={{
-            title: 'Event Details',
-          }}
-        />
-        <Stack.Screen
-          name="attendees/create-attendee"
-          options={{
-            title: 'Log Ticket Sale',
-          }}
-        />
-      </Stack>
+      <ReactQueryProvider>
+        <Stack>
+          <Stack.Screen
+            name="index"
+            options={{
+              title: 'Events',
+              headerBackVisible: false,
+              headerRight: () => <CreateEventButton />,
+            }}
+          />
+          <Stack.Screen
+            name="events/create-event"
+            options={{
+              title: 'Create Event',
+            }}
+          />
+          <Stack.Screen
+            name="events/details/[id]"
+            options={{
+              title: 'Event Details',
+            }}
+          />
+          <Stack.Screen
+            name="attendees/create-attendee"
+            options={{
+              title: 'Log Ticket Sale',
+            }}
+          />
+        </Stack>
+      </ReactQueryProvider>
       <PortalHost />
     </ThemeProvider>
   );

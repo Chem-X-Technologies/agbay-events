@@ -12,8 +12,10 @@ import {
 import { ScrollView, View } from 'react-native';
 import { Button } from '~/components/ui/button';
 import { Text } from '~/components/ui/text';
-import { MOCK_EVENTS } from '~/lib/constants';
 import { useRouter } from 'expo-router';
+import AgbayEvent from '~/lib/types/agbay-event';
+import { createEvent } from '~/lib/services/eventService';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -38,10 +40,18 @@ export default function CreateEventScreen() {
     },
   });
   const router = useRouter();
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: createEvent,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['events'] });
+      router.back();
+    },
+  });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    MOCK_EVENTS.push({
-      id: `${MOCK_EVENTS.length + 1}`,
+    const event: AgbayEvent = {
+      id: '',
       name: values.name,
       description: values.description,
       date: values.date,
@@ -51,14 +61,14 @@ export default function CreateEventScreen() {
       contactPerson: values.contactPerson,
       contactNumber: values.contactNumber,
       attendees: [],
-    });
+    };
 
-    router.push('/');
+    mutation.mutate(event);
   };
 
   return (
     <ScrollView
-      contentContainerClassName="p-6 mx-auto w-full max-w-xl bg-secondary/30"
+      contentContainerClassName="p-6 mx-auto w-full max-w-xl bg-secondary"
       showsVerticalScrollIndicator={false}
     >
       <Form {...form}>
@@ -109,7 +119,10 @@ export default function CreateEventScreen() {
               <FormInput label="Contact Number" {...field} />
             )}
           />
-          <Button onPress={form.handleSubmit(onSubmit)}>
+          <Button
+            onPress={form.handleSubmit(onSubmit)}
+            loading={mutation.isPending}
+          >
             <Text>Submit</Text>
           </Button>
         </View>

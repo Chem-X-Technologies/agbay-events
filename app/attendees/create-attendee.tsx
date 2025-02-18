@@ -1,7 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useForm } from 'react-hook-form';
-import { ScrollView, View } from 'react-native';
+import { View } from 'react-native';
 import * as z from 'zod';
 import { Button } from '~/components/ui/button';
 import {
@@ -11,8 +12,8 @@ import {
   FormInputNumber,
 } from '~/components/ui/form';
 import { Text } from '~/components/ui/text';
-import { MOCK_EVENTS } from '~/lib/constants';
-import { AttendeeStatus } from '~/lib/types/attendee';
+import { createAttendee } from '~/lib/services/attendeeService';
+import Attendee, { AttendeeStatus } from '~/lib/types/attendee';
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -25,34 +26,44 @@ const formSchema = z.object({
 
 export default function CreateAttendeeScreen() {
   const { eventId } = useLocalSearchParams();
-  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       ticketCount: 0,
     },
   });
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: ({
+      eventId,
+      attendee,
+    }: {
+      eventId: string;
+      attendee: Attendee;
+    }) => createAttendee(eventId, attendee),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`events/${eventId}`] });
+      router.back();
+    },
+  });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    const event = MOCK_EVENTS.find((e) => e.id === eventId);
-
-    if (!event) return;
-
-    event.attendees.push({
-      id: `${event.attendees.length + 1}`,
+    const attendee: Attendee = {
+      id: '',
       name: values.name,
       ticketCount: values.ticketCount,
       status: AttendeeStatus.ForAttendance,
-    });
+    };
 
-    router.push(`/events/details/${eventId}`);
+    mutation.mutate({
+      eventId: eventId as string,
+      attendee,
+    });
   };
 
   return (
-    <ScrollView
-      contentContainerClassName="p-6 mx-auto w-full max-w-xl bg-secondary/30"
-      showsVerticalScrollIndicator={false}
-    >
+    <View className="flex-1 p-6 mx-auto w-full max-w-xl bg-secondary">
       <Form {...form}>
         <View className="gap-7">
           <FormField
@@ -69,11 +80,14 @@ export default function CreateAttendeeScreen() {
               <FormInputNumber label="Ticket Count *" {...field} />
             )}
           />
-          <Button onPress={form.handleSubmit(onSubmit)}>
+          <Button
+            onPress={form.handleSubmit(onSubmit)}
+            loading={mutation.isPending}
+          >
             <Text>Submit</Text>
           </Button>
         </View>
       </Form>
-    </ScrollView>
+    </View>
   );
 }

@@ -261,7 +261,7 @@ FormInput.displayName = 'FormInput';
 
 const FormInputNumber = React.forwardRef<
   React.ElementRef<typeof Input>,
-  FormItemProps<typeof Input, number>
+  FormItemProps<typeof Input, number | undefined>
 >(({ label, description, onChange, value, keyboardType, ...props }, ref) => {
   const inputRef = React.useRef<React.ComponentRef<typeof Input>>(null);
   const {
@@ -314,10 +314,11 @@ const FormInputNumber = React.forwardRef<
             : `${formDescriptionNativeID} ${formMessageNativeID}`
         }
         aria-invalid={!!error}
-        defaultValue={`${value}`}
         onChangeText={(newValue) => {
           const sanitizedValue = sanitizeNumberString(newValue);
-          onChange(!isNaN(Number(sanitizedValue)) ? Number(sanitizedValue) : 0);
+          onChange(
+            !isNaN(Number(sanitizedValue)) ? Number(sanitizedValue) : undefined
+          );
         }}
         keyboardType={keyboardType ?? 'numeric'}
         {...props}

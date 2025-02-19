@@ -35,9 +35,7 @@ const formSchema = z.object({
 export default function CreateEventScreen() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      ticketPrice: 0,
-    },
+    defaultValues: {},
   });
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -102,7 +100,11 @@ export default function CreateEventScreen() {
             control={form.control}
             name="ticketPrice"
             render={({ field }) => (
-              <FormInputNumber label="Ticket Price *" {...field} />
+              <FormInputNumber
+                label="Ticket Price *"
+                placeholder="0.00"
+                {...field}
+              />
             )}
           />
           <FormField

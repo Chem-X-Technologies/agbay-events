@@ -28,9 +28,7 @@ export default function CreateAttendeeScreen() {
   const { eventId } = useLocalSearchParams();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      ticketCount: 0,
-    },
+    defaultValues: {},
   });
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -77,7 +75,11 @@ export default function CreateAttendeeScreen() {
             control={form.control}
             name="ticketCount"
             render={({ field }) => (
-              <FormInputNumber label="Ticket Count *" {...field} />
+              <FormInputNumber
+                label="Ticket Count *"
+                placeholder="0"
+                {...field}
+              />
             )}
           />
           <Button

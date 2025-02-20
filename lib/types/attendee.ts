@@ -3,6 +3,7 @@ type Attendee = {
   name: string;
   ticketCount: number;
   status: AttendeeStatus;
+  eventId: string;
 }
 
 export enum AttendeeStatus {

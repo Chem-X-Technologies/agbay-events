@@ -1,26 +1,34 @@
 import { View } from 'react-native';
-import { Button } from '~/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '~/components/ui/card';
 import { Large, Muted } from '~/components/ui/typography';
-import AgbayEvent from '~/lib/types/agbay-event';
 import { formatDate, formatPeso, formatTime } from '~/lib/utils';
-import { Text } from '~/components/ui/text';
+import { useLocalSearchParams } from 'expo-router';
+import { useQuery } from '@tanstack/react-query';
+import { getEventById } from '~/lib/services/eventService';
+import LoadingSpinner from '~/components/shared/LoadingSpinner';
 
-export default function EventCard({ event }: { event: AgbayEvent }) {
+export default function EventCard() {
+  const { id } = useLocalSearchParams();
+  const { data, isFetching } = useQuery({
+    queryKey: [`events/${id}`],
+    queryFn: () => getEventById(id as string),
+  });
+
+  if (isFetching) return <LoadingSpinner />;
+
   return (
     <Card className="w-full p-2 rounded-2xl">
       <CardHeader className="items-center">
-        <CardTitle className="text-center">{event?.name}</CardTitle>
-        {!!event?.description && (
+        <CardTitle className="text-center">{data?.name}</CardTitle>
+        {!!data?.description && (
           <CardDescription className="pt-2 text-base font-semibold">
-            {event.description}
+            {data.description}
           </CardDescription>
         )}
       </CardHeader>
@@ -28,30 +36,30 @@ export default function EventCard({ event }: { event: AgbayEvent }) {
         <View className="flex-row justify-between gap-4 flex-wrap">
           <View>
             <Muted>Date</Muted>
-            <Large>{formatDate(event?.date ?? '')}</Large>
+            <Large>{formatDate(data?.date ?? '')}</Large>
           </View>
           <View>
             <Muted>Time</Muted>
-            <Large>{formatTime(event?.time ?? '')}</Large>
+            <Large>{formatTime(data?.time ?? '')}</Large>
           </View>
           <View>
             <Muted>Venue</Muted>
-            <Large>{event?.venue}</Large>
+            <Large>{data?.venue}</Large>
           </View>
           <View>
             <Muted>Ticket Price</Muted>
-            <Large>{formatPeso(event?.ticketPrice ?? 0)}</Large>
+            <Large>{formatPeso(data?.ticketPrice ?? 0)}</Large>
           </View>
-          {!!event?.contactPerson && (
+          {!!data?.contactPerson && (
             <View className="">
               <Muted>Contact Person</Muted>
-              <Large>{event?.contactPerson ?? '-'}</Large>
+              <Large>{data?.contactPerson ?? '-'}</Large>
             </View>
           )}
-          {!!event?.contactNumber && (
+          {!!data?.contactNumber && (
             <View>
               <Muted>Contact Number</Muted>
-              <Large>{event?.contactNumber ?? '-'}</Large>
+              <Large>{data?.contactNumber ?? '-'}</Large>
             </View>
           )}
         </View>

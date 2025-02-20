@@ -85,6 +85,12 @@ export default function RootLayout() {
               title: 'Log Ticket Sale',
             }}
           />
+          <Stack.Screen
+            name="attendees/details/[id]"
+            options={{
+              title: 'Attendee Details',
+            }}
+          />
         </Stack>
       </ReactQueryProvider>
       <PortalHost />

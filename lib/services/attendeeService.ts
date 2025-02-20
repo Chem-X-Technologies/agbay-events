@@ -1,23 +1,31 @@
-import { MOCK_EVENTS } from '../constants';
+import { MOCK_ATTENDEES } from '../constants';
 import Attendee from '../types/attendee';
 
-// export const getAttendees = async (eventId: string): Promise<Attendee[]> => {
-//   return new Promise((resolve) => {
-//     setTimeout(() => {
-//       resolve(MOCK_EVENTS.find(event => event.id === eventId)?.attendees ?? []);
-//     }, 1000);
-//   });
-// };
-
-export const createAttendee = async (eventId: string, attendee: Attendee): Promise<void> => {
-  return new Promise<void>((resolve) => {
+export const getAttendees = async (eventId: string): Promise<Attendee[]> => {
+  return new Promise((resolve) => {
     setTimeout(() => {
-      const event = MOCK_EVENTS.find(event => event.id === eventId);
-      event?.attendees.push({
+      resolve(MOCK_ATTENDEES.filter(a => a.eventId === eventId));
+    }, 1000);
+  });
+};
+
+export const getAttendeeById = async (id: string): Promise<Attendee | undefined> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(MOCK_ATTENDEES.find(a => a.id === id));
+    }, 1000);
+  });
+};
+
+export const createAttendee = async (attendee: Attendee): Promise<Attendee> => {
+  return new Promise<Attendee>((resolve) => {
+    setTimeout(() => {
+      const newAttendee = {
         ...attendee,
-        id: `${event?.attendees.length + 1}`,
-      });
-      resolve();
+        id: `${(MOCK_ATTENDEES.length ?? 0) + 1}`,
+      };
+      MOCK_ATTENDEES.push(newAttendee);
+      resolve(newAttendee);
     }, 1000);
   });
 };

@@ -1,5 +1,3 @@
-import Attendee from "./attendee";
-
 type AgbayEvent = {
   id: string;
   name: string;
@@ -10,7 +8,6 @@ type AgbayEvent = {
   description?: string;
   contactPerson?: string;
   contactNumber?: string;
-  attendees: Attendee[];
 }
 
 export default AgbayEvent;

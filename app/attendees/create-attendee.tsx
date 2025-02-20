@@ -33,16 +33,15 @@ export default function CreateAttendeeScreen() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationFn: ({
-      eventId,
-      attendee,
-    }: {
-      eventId: string;
-      attendee: Attendee;
-    }) => createAttendee(eventId, attendee),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`events/${eventId}`] });
-      router.back();
+    mutationFn: createAttendee,
+    onSuccess: (attendee) => {
+      queryClient.invalidateQueries({
+        queryKey: [`attendees?eventId=${eventId}`],
+      });
+      router.replace({
+        pathname: '/attendees/details/[id]',
+        params: { id: attendee.id as string },
+      });
     },
   });
 
@@ -52,12 +51,10 @@ export default function CreateAttendeeScreen() {
       name: values.name,
       ticketCount: values.ticketCount,
       status: AttendeeStatus.ForAttendance,
+      eventId: eventId as string,
     };
 
-    mutation.mutate({
-      eventId: eventId as string,
-      attendee,
-    });
+    mutation.mutate(attendee);
   };
 
   return (

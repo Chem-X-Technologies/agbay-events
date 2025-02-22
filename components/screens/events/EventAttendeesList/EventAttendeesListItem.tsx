@@ -10,9 +10,9 @@ export default function EventAttendeesListItem({
   attendee: Attendee;
 }) {
   const statusColorMap = {
-    [AttendeeStatus.Attended]: 'text-green-500',
-    [AttendeeStatus.NoShow]: 'text-red-500',
-    [AttendeeStatus.ForAttendance]: 'text-yellow-500',
+    [AttendeeStatus.Attended]: 'text-green-400',
+    [AttendeeStatus.NoShow]: 'text-red-400',
+    [AttendeeStatus.ForAttendance]: 'text-yellow-400',
   };
 
   return (

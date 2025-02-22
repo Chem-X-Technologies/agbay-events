@@ -16,6 +16,7 @@ import { PortalHost } from '@rn-primitives/portal';
 import { setAndroidNavigationBar } from '~/lib/android-navigation-bar';
 import CreateEventButton from '~/components/screens/events/CreateEventButton';
 import ReactQueryProvider from '~/components/providers/ReactQueryProvider';
+import Footer from '~/components/shared/Footer';
 
 const LIGHT_THEME: Theme = {
   ...DefaultTheme,
@@ -97,7 +98,14 @@ export default function RootLayout() {
               title: 'Ticket Validation',
             }}
           />
+          <Stack.Screen
+            name="scan"
+            options={{
+              title: 'QR Reader',
+            }}
+          />
         </Stack>
+        <Footer />
       </ReactQueryProvider>
       <PortalHost />
     </ThemeProvider>

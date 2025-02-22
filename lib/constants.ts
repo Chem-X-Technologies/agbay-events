@@ -20,12 +20,6 @@ export const NAV_THEME = {
   },
 };
 
-export const statusColorMap = {
-  [AttendeeStatus.Attended]: 'text-green-500',
-  [AttendeeStatus.NoShow]: 'text-red-500',
-  [AttendeeStatus.ForAttendance]: 'text-yellow-500',
-};
-
 export const MOCK_EVENTS: AgbayEvent[] = [
   {
     id: '1',

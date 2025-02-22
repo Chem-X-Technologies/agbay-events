@@ -88,7 +88,7 @@ export default function RootLayout() {
           <Stack.Screen
             name="attendees/details/[id]"
             options={{
-              title: 'Attendee Details',
+              title: 'Ticket Details',
             }}
           />
         </Stack>

@@ -1,20 +1,16 @@
-import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { View } from 'react-native';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import AttendeeCard from '~/components/screens/attendees/AttendeeCard';
-import NativeWindBottomSheet from '~/components/shared/NativeWindBottomSheet';
-import NativeWindBottomSheetView from '~/components/shared/NativeWindBottomSheetView';
-import { Button } from '~/components/ui/button';
-import { Text } from '~/components/ui/text';
 import * as Linking from 'expo-linking';
 import QRCode from 'react-qr-code';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useNavigation } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
 import { getAttendeeById } from '~/lib/services/attendeeService';
 import { getEventById } from '~/lib/services/eventService';
 import LoadingSpinner from '~/components/shared/LoadingSpinner';
 import TicketCard from '~/components/screens/attendees/TicketCard';
+import ViewShot from 'react-native-view-shot';
+import * as Sharing from 'expo-sharing';
+import ShareTicketButton from '~/components/screens/attendees/ShareTicketButton';
 
 const fetchData = async (attendeeId: string) => {
   const attendee = await getAttendeeById(attendeeId);
@@ -23,17 +19,40 @@ const fetchData = async (attendeeId: string) => {
 };
 
 export default function AttendeeDetailsScreen() {
-  const { id } = useLocalSearchParams();
+  const { id } = useLocalSearchParams<{ id: string }>();
+  const navigation = useNavigation();
   const { data, isFetching } = useQuery({
     queryKey: [`attendees/${id}`],
-    queryFn: () => fetchData(id as string),
+    queryFn: () => fetchData(id),
   });
+  const imageRef = useRef<ViewShot>(null);
+  const url = Linking.createURL('/old-index');
+  const [loading, setLoading] = useState(false);
 
-  const handleViewQRCode = () => {
-    bottomSheetRef.current?.expand();
+  const handleShareImage = () => {
+    Sharing.isAvailableAsync().then((available) => {
+      if (!available) {
+        return;
+      }
+
+      if (!imageRef.current) return;
+
+      setLoading(true);
+      (imageRef.current.capture
+        ? imageRef.current.capture()
+        : Promise.resolve('')
+      ).then((uri) => {
+        setLoading(false);
+        Sharing.shareAsync(uri).finally(() => {});
+      });
+    });
   };
 
-  const bottomSheetRef = useRef<BottomSheet>(null);
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => <ShareTicketButton onPress={handleShareImage} />,
+    });
+  }, [navigation]);
 
   if (isFetching) return <LoadingSpinner />;
 
@@ -41,30 +60,21 @@ export default function AttendeeDetailsScreen() {
 
   const { attendee, event } = data;
 
-  const url = Linking.createURL('/old-index');
-
   return (
-    <GestureHandlerRootView className="flex-1">
-      <View className="flex-1 p-4 items-center bg-secondary gap-4">
-        <AttendeeCard event={event} attendee={attendee} />
-        <Button onPress={handleViewQRCode}>
-          <Text>View QR Code</Text>
-        </Button>
-      </View>
-      <NativeWindBottomSheet
-        snapPoints={[30, '100%']}
-        ref={bottomSheetRef}
-        backgroundClassName="bg-secondary"
-        handleClassName="bg-secondary"
-        handleIndicatorClassName="bg-foreground"
+    <>
+      {loading && <LoadingSpinner />}
+      <ViewShot
+        ref={imageRef}
+        style={{ flex: 1 }}
+        onCaptureFailure={(error) => console.error('onCaptureFailure', error)}
       >
-        <NativeWindBottomSheetView className="bg-secondary flex-1 p-4 items-center justify-around">
+        <View className="flex-1 items-center justify-around bg-secondary px-4">
           <View className="bg-white p-5 rounded-2xl">
             <QRCode value={url} />
           </View>
           <TicketCard event={event} attendee={attendee} />
-        </NativeWindBottomSheetView>
-      </NativeWindBottomSheet>
-    </GestureHandlerRootView>
+        </View>
+      </ViewShot>
+    </>
   );
 }

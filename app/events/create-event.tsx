@@ -13,7 +13,7 @@ import { ScrollView, View } from 'react-native';
 import { Button } from '~/components/ui/button';
 import { Text } from '~/components/ui/text';
 import { useRouter } from 'expo-router';
-import AgbayEvent from '~/lib/types/agbay-event';
+import { CreateAgbayEvent } from '~/lib/types/agbay-event';
 import { createEvent } from '~/lib/services/eventService';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
@@ -48,8 +48,7 @@ export default function CreateEventScreen() {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    const event: AgbayEvent = {
-      id: '',
+    const event: CreateAgbayEvent = {
       name: values.name,
       description: values.description,
       date: values.date,

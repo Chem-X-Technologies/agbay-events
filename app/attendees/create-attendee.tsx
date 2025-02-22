@@ -13,7 +13,7 @@ import {
 } from '~/components/ui/form';
 import { Text } from '~/components/ui/text';
 import { createAttendee } from '~/lib/services/attendeeService';
-import Attendee, { AttendeeStatus } from '~/lib/types/attendee';
+import Attendee, { AttendeeStatus, CreateAttendee } from '~/lib/types/attendee';
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -46,8 +46,7 @@ export default function CreateAttendeeScreen() {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    const attendee: Attendee = {
-      id: '',
+    const attendee: CreateAttendee = {
       name: values.name,
       ticketCount: values.ticketCount,
       status: AttendeeStatus.ForAttendance,

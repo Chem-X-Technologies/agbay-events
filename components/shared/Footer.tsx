@@ -8,6 +8,11 @@ export default function Footer() {
   const [permission, requestPermission] = useCameraPermissions();
   const router = useRouter();
   const pathname = usePathname();
+  const excludedRoutes = [
+    '/scan',
+    '/events/create-event',
+    '/attendees/create-attendee',
+  ];
 
   const handleScanQrPress = () => {
     requestPermission().then((result) => {
@@ -17,7 +22,10 @@ export default function Footer() {
     });
   };
 
-  if (pathname === '/scan') {
+  if (
+    excludedRoutes.includes(pathname) ||
+    pathname.startsWith('/attendees/details')
+  ) {
     return null;
   }
 

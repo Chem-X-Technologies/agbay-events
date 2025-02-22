@@ -32,32 +32,36 @@ export default function EventCard() {
           </CardDescription>
         )}
       </CardHeader>
-      <CardContent className="gap-6">
-        <View className="flex-row justify-between gap-4 flex-wrap">
-          <View>
+      <CardContent className="gap-4">
+        <View className="flex-row gap-4">
+          <View className="flex-1">
             <Muted>Date</Muted>
             <Large>{formatDate(data?.date ?? '')}</Large>
           </View>
-          <View>
+          <View className="flex-1">
             <Muted>Time</Muted>
             <Large>{formatTime(data?.time ?? '')}</Large>
           </View>
-          <View>
+        </View>
+        <View className="flex-row gap-4">
+          <View className="flex-1">
             <Muted>Venue</Muted>
             <Large>{data?.venue}</Large>
           </View>
-          <View>
+          <View className="flex-1">
             <Muted>Ticket Price</Muted>
             <Large>{formatPeso(data?.ticketPrice ?? 0)}</Large>
           </View>
+        </View>
+        <View className="flex-row gap-4 flex-wrap">
           {!!data?.contactPerson && (
-            <View className="">
+            <View className="flex-1">
               <Muted>Contact Person</Muted>
               <Large>{data?.contactPerson ?? '-'}</Large>
             </View>
           )}
           {!!data?.contactNumber && (
-            <View>
+            <View className="flex-1">
               <Muted>Contact Number</Muted>
               <Large>{data?.contactNumber ?? '-'}</Large>
             </View>

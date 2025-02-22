@@ -29,3 +29,17 @@ export const createAttendee = async (attendee: Attendee): Promise<Attendee> => {
     }, 1000);
   });
 };
+
+export const updateAttendee = async (id: string, updatedData: Partial<Attendee>): Promise<Attendee | undefined> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const index = MOCK_ATTENDEES.findIndex(a => a.id === id);
+      if (index !== -1) {
+        MOCK_ATTENDEES[index] = { ...MOCK_ATTENDEES[index], ...updatedData };
+        resolve(MOCK_ATTENDEES[index]);
+      } else {
+        resolve(undefined);
+      }
+    }, 1000);
+  });
+};

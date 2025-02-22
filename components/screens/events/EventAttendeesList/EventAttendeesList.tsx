@@ -11,10 +11,10 @@ import { getAttendees } from '~/lib/services/attendeeService';
 import LoadingSpinner from '~/components/shared/LoadingSpinner';
 
 export default function EventAttendeesList() {
-  const { id } = useLocalSearchParams();
+  const { id } = useLocalSearchParams<{ id: string }>();
   const { data, isFetching } = useQuery({
     queryKey: [`attendees?eventId=${id}`],
-    queryFn: () => getAttendees(id as string),
+    queryFn: () => getAttendees(id),
   });
 
   if (isFetching) return <LoadingSpinner />;

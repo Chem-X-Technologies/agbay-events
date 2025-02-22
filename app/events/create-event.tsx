@@ -58,7 +58,6 @@ export default function CreateEventScreen() {
       ticketPrice: values.ticketPrice,
       contactPerson: values.contactPerson,
       contactNumber: values.contactNumber,
-      attendees: [],
     };
 
     mutation.mutate(event);

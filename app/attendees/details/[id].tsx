@@ -26,7 +26,7 @@ export default function AttendeeDetailsScreen() {
     queryFn: () => fetchData(id),
   });
   const imageRef = useRef<ViewShot>(null);
-  const url = Linking.createURL('/old-index');
+  const url = Linking.createURL(`/attendees/validate/${id}`);
   const [loading, setLoading] = useState(false);
 
   const handleShareImage = () => {

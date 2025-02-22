@@ -91,6 +91,12 @@ export default function RootLayout() {
               title: 'Ticket Details',
             }}
           />
+          <Stack.Screen
+            name="attendees/validate/[id]"
+            options={{
+              title: 'Ticket Validation',
+            }}
+          />
         </Stack>
       </ReactQueryProvider>
       <PortalHost />

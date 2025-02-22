@@ -5,7 +5,7 @@
     "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "agbay",
+    "scheme": "agbay-events",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {

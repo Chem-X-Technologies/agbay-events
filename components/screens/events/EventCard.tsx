@@ -14,10 +14,10 @@ import { getEventById } from '~/lib/services/eventService';
 import LoadingSpinner from '~/components/shared/LoadingSpinner';
 
 export default function EventCard() {
-  const { id } = useLocalSearchParams();
+  const { id } = useLocalSearchParams<{ id: string }>();
   const { data, isFetching } = useQuery({
     queryKey: [`events/${id}`],
-    queryFn: () => getEventById(id as string),
+    queryFn: () => getEventById(id),
   });
 
   if (isFetching) return <LoadingSpinner />;

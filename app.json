@@ -2,9 +2,9 @@
   "expo": {
     "name": "Agbay Events",
     "slug": "agbay",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/icon.jpg",
     "scheme": "agbay-events",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -20,10 +20,6 @@
       "supportsTablet": true
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
       "package": "com.chemicalx.agbay"
     },
     "web": {

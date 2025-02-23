@@ -4,7 +4,7 @@
     "slug": "agbay",
     "version": "1.0.4",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.jpg",
+    "icon": "./assets/images/icon.png",
     "scheme": "agbay-events",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -20,6 +20,10 @@
       "supportsTablet": true
     },
     "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
       "package": "com.chemicalx.agbay"
     },
     "web": {

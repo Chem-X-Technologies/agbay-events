@@ -6,6 +6,7 @@ import EventForm, {
   EventFormType,
 } from '~/components/screens/events/EventForm';
 import LoadingSpinner from '~/components/shared/LoadingSpinner';
+import { toast } from 'sonner-native';
 
 export default function EditEventScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -15,7 +16,12 @@ export default function EditEventScreen() {
     mutationFn: (event: EditAgbayEvent) => editEvent(id, event),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [`events/${id}`] });
+      queryClient.invalidateQueries({ queryKey: ['events'] });
+      toast.success('Event updated successfully!');
       router.back();
+    },
+    onError: (error) => {
+      toast.error(`Failed to update event: ${error.message}`);
     },
   });
 

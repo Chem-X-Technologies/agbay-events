@@ -5,6 +5,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import EventForm, {
   EventFormType,
 } from '~/components/screens/events/EventForm';
+import { toast } from 'sonner-native';
 
 export default function CreateEventScreen() {
   const router = useRouter();
@@ -13,7 +14,11 @@ export default function CreateEventScreen() {
     mutationFn: createEvent,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['events'] });
+      toast.success('Event created successfully!');
       router.back();
+    },
+    onError: (error) => {
+      toast.error(`Failed to create event: ${error.message}`);
     },
   });
 

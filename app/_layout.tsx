@@ -18,6 +18,7 @@ import CreateEventButton from '~/components/screens/events/CreateEventButton';
 import ReactQueryProvider from '~/components/providers/ReactQueryProvider';
 import Footer from '~/components/shared/Footer';
 import EventOptions from '~/components/screens/events/EventOptions';
+import ToasterProvider from '~/components/providers/ToasterProvider';
 
 const LIGHT_THEME: Theme = {
   ...DefaultTheme,
@@ -60,60 +61,62 @@ export default function RootLayout() {
     <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
       <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
       <ReactQueryProvider>
-        <Stack>
-          <Stack.Screen
-            name="index"
-            options={{
-              title: 'Events',
-              headerBackVisible: false,
-              headerRight: () => <CreateEventButton />,
-            }}
-          />
-          <Stack.Screen
-            name="events/create-event"
-            options={{
-              title: 'Create Event',
-            }}
-          />
-          <Stack.Screen
-            name="events/details/[id]"
-            options={{
-              title: 'Event Details',
-              headerRight: () => <EventOptions />,
-            }}
-          />
-          <Stack.Screen
-            name="events/edit-event/[id]"
-            options={{
-              title: 'Edit Event',
-            }}
-          />
-          <Stack.Screen
-            name="attendees/create-attendee"
-            options={{
-              title: 'Log Ticket Sale',
-            }}
-          />
-          <Stack.Screen
-            name="attendees/details/[id]"
-            options={{
-              title: 'Ticket Details',
-            }}
-          />
-          <Stack.Screen
-            name="attendees/validate/[id]"
-            options={{
-              title: 'Ticket Validation',
-            }}
-          />
-          <Stack.Screen
-            name="scan"
-            options={{
-              title: 'QR Reader',
-            }}
-          />
-        </Stack>
-        <Footer />
+        <ToasterProvider>
+          <Stack>
+            <Stack.Screen
+              name="index"
+              options={{
+                title: 'Events',
+                headerBackVisible: false,
+                headerRight: () => <CreateEventButton />,
+              }}
+            />
+            <Stack.Screen
+              name="events/create-event"
+              options={{
+                title: 'Create Event',
+              }}
+            />
+            <Stack.Screen
+              name="events/details/[id]"
+              options={{
+                title: 'Event Details',
+                headerRight: () => <EventOptions />,
+              }}
+            />
+            <Stack.Screen
+              name="events/edit-event/[id]"
+              options={{
+                title: 'Edit Event',
+              }}
+            />
+            <Stack.Screen
+              name="attendees/create-attendee"
+              options={{
+                title: 'Log Ticket Sale',
+              }}
+            />
+            <Stack.Screen
+              name="attendees/details/[id]"
+              options={{
+                title: 'Ticket Details',
+              }}
+            />
+            <Stack.Screen
+              name="attendees/validate/[id]"
+              options={{
+                title: 'Ticket Validation',
+              }}
+            />
+            <Stack.Screen
+              name="scan"
+              options={{
+                title: 'QR Reader',
+              }}
+            />
+          </Stack>
+          <Footer />
+        </ToasterProvider>
       </ReactQueryProvider>
       <PortalHost />
     </ThemeProvider>

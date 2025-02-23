@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useForm } from 'react-hook-form';
 import { View } from 'react-native';
+import { toast } from 'sonner-native';
 import * as z from 'zod';
 import { Button } from '~/components/ui/button';
 import {
@@ -13,7 +14,7 @@ import {
 } from '~/components/ui/form';
 import { Text } from '~/components/ui/text';
 import { createAttendee } from '~/lib/services/attendeeService';
-import Attendee, { AttendeeStatus, CreateAttendee } from '~/lib/types/attendee';
+import { AttendeeStatus, CreateAttendee } from '~/lib/types/attendee';
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -38,10 +39,14 @@ export default function CreateAttendeeScreen() {
       queryClient.invalidateQueries({
         queryKey: [`attendees?eventId=${eventId}`],
       });
+      toast.success('Ticket Sale logged successfully!');
       router.replace({
         pathname: '/attendees/details/[id]',
         params: { id: attendee.id as string },
       });
+    },
+    onError: (error) => {
+      toast.error(`Failed to log ticket sale: ${error.message}`);
     },
   });
 

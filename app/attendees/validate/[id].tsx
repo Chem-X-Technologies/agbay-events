@@ -6,7 +6,7 @@ import LoadingSpinner from '~/components/shared/LoadingSpinner';
 import { CheckCircle2 } from '~/lib/icons/CheckCircle2';
 import { XCircle } from '~/lib/icons/XCircle';
 import { Button } from '~/components/ui/button';
-import { updateAttendee } from '~/lib/services/attendeeService';
+import { editAttendee } from '~/lib/services/attendeeService';
 import Attendee, { AttendeeStatus } from '~/lib/types/attendee';
 import { Text } from '~/components/ui/text';
 import { Card, CardHeader, CardTitle } from '~/components/ui/card';
@@ -18,7 +18,7 @@ export default function ValidateAttendeeScreen() {
   const router = useRouter();
   const mutation = useMutation({
     mutationFn: (updatedData: Partial<Attendee>) =>
-      updateAttendee(id, updatedData),
+      editAttendee(id, updatedData),
     onSuccess: (attendee) => {
       queryClient.invalidateQueries({
         queryKey: [`events/${attendee?.eventId}`],

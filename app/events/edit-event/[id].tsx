@@ -13,7 +13,8 @@ export default function EditEventScreen() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationFn: (event: EditAgbayEvent) => editEvent(id, event),
+    mutationFn: (payload: { id: string; event: EditAgbayEvent }) =>
+      editEvent(payload.id, payload.event),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [`events/${id}`] });
       queryClient.invalidateQueries({ queryKey: ['events'] });
@@ -26,7 +27,7 @@ export default function EditEventScreen() {
   });
 
   const { data, isFetching } = useQuery({
-    queryKey: [`events/${id}`],
+    queryKey: [`edit-event/${id}`],
     queryFn: () => getEventById(id),
   });
 
@@ -42,7 +43,7 @@ export default function EditEventScreen() {
       contactNumber: values.contactNumber,
     };
 
-    mutation.mutate(event);
+    mutation.mutate({ id, event });
   };
 
   if (isFetching) return <LoadingSpinner />;

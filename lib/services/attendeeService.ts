@@ -1,6 +1,6 @@
 import { collection, getDocs, doc, getDoc, addDoc, updateDoc, query, where } from 'firebase/firestore';
 import { db } from '../firebase';
-import Attendee, { CreateAttendee } from '../types/attendee';
+import Attendee, { CreateAttendee, EditAttendee } from '../types/attendee';
 import { sanitizeObject } from '../utils';
 
 export const getAttendees = async (eventId: string): Promise<Attendee[]> => {
@@ -47,7 +47,7 @@ export const createAttendee = async (attendee: CreateAttendee): Promise<Attendee
   }
 };
 
-export const updateAttendee = async (id: string, updatedData: Partial<Attendee>): Promise<Attendee | undefined> => {
+export const editAttendee = async (id: string, updatedData: EditAttendee): Promise<Attendee | undefined> => {
   try {
     const attendeeRef = doc(db, 'attendees', id);
     await updateDoc(attendeeRef, updatedData);

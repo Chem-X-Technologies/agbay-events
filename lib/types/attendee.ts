@@ -20,5 +20,8 @@ interface Attendee extends BaseAttendee {
 // Interface for creating new documents
 interface CreateAttendee extends BaseAttendee { }
 
-export type { Attendee, CreateAttendee };
+// Interface for editing documents
+interface EditAttendee extends Partial<BaseAttendee> { }
+
+export type { Attendee, CreateAttendee, EditAttendee };
 export default Attendee;

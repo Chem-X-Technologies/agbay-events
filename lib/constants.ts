@@ -1,6 +1,3 @@
-import AgbayEvent from "./types/agbay-event";
-import Attendee, { AttendeeStatus } from "./types/attendee";
-
 export const NAV_THEME = {
   light: {
     background: 'hsl(0 0% 100%)', // background

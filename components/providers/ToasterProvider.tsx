@@ -8,7 +8,7 @@ export default function ToasterProvider({ children }: { children: ReactNode }) {
     <SafeAreaProvider>
       <GestureHandlerRootView>
         {children}
-        <Toaster position="bottom-center" />
+        <Toaster />
       </GestureHandlerRootView>
     </SafeAreaProvider>
   );

@@ -42,6 +42,8 @@ import { cn, formatDate, formatTime } from '../../lib/utils';
 import { Text } from './text';
 import { X } from '~/lib/icons/X';
 import Override from '~/lib/types/override';
+import NativeWindDropdown from '../shared/NativeWindDropdown';
+import { Dropdown } from 'react-native-element-dropdown';
 
 const Form = FormProvider;
 
@@ -673,41 +675,73 @@ FormTimePicker.displayName = 'FormTimePicker';
 
 // FormRadioGroup.displayName = 'FormRadioGroup';
 
-// const FormCombobox = React.forwardRef<
-//   React.ElementRef<typeof Combobox>,
-//   FormItemProps<typeof Combobox, ComboboxOption | null>
-// >(({ label, description, value, onChange, ...props }, ref) => {
-//   const {
-//     error,
-//     formItemNativeID,
-//     formDescriptionNativeID,
-//     formMessageNativeID,
-//   } = useFormField();
+const FormCombobox = React.forwardRef<
+  React.ElementRef<typeof Dropdown>,
+  FormItemProps<typeof NativeWindDropdown, string | null>
+>(
+  (
+    {
+      label,
+      description,
+      value,
+      onChange,
+      className,
+      placeholderClassName,
+      containerClassName,
+      itemTextClassName,
+      selectedTextClassName,
+      activeColorClassName,
+      ...props
+    },
+    ref
+  ) => {
+    const {
+      error,
+      formItemNativeID,
+      formDescriptionNativeID,
+      formMessageNativeID,
+    } = useFormField();
 
-//   return (
-//     <FormItem>
-//       {!!label && <FormLabel nativeID={formItemNativeID}>{label}</FormLabel>}
-//       <Combobox
-//         ref={ref}
-//         placeholder="Select framework"
-//         aria-labelledby={formItemNativeID}
-//         aria-describedby={
-//           !error
-//             ? `${formDescriptionNativeID}`
-//             : `${formDescriptionNativeID} ${formMessageNativeID}`
-//         }
-//         aria-invalid={!!error}
-//         selectedItem={value}
-//         onSelectedItemChange={onChange}
-//         {...props}
-//       />
-//       {!!description && <FormDescription>{description}</FormDescription>}
-//       <FormMessage />
-//     </FormItem>
-//   );
-// });
+    return (
+      <FormItem>
+        {!!label && <FormLabel nativeID={formItemNativeID}>{label}</FormLabel>}
+        <NativeWindDropdown
+          ref={ref}
+          aria-labelledby={formItemNativeID}
+          aria-describedby={
+            !error
+              ? `${formDescriptionNativeID}`
+              : `${formDescriptionNativeID} ${formMessageNativeID}`
+          }
+          aria-invalid={!!error}
+          value={value}
+          onChange={(item) => onChange(item?.value)}
+          className={cn(
+            'web:flex h-10 native:h-12 web:w-full rounded-md border border-input bg-background px-3 web:py-2 text-base lg:text-sm native:text-lg native:leading-[1.25] text-foreground placeholder:text-muted-foreground web:ring-offset-background file:border-0 file:bg-transparent file:font-medium web:focus-visible:outline-none web:focus-visible:ring-2 web:focus-visible:ring-ring web:focus-visible:ring-offset-2',
+            props.disabled && 'opacity-50 web:cursor-not-allowed',
+            className
+          )}
+          placeholderClassName={cn(
+            'text-muted-foreground',
+            placeholderClassName
+          )}
+          containerClassName={cn('bg-background', containerClassName)}
+          itemTextClassName={cn('text-base text-foreground', itemTextClassName)}
+          selectedTextClassName={cn(
+            'text-base text-foreground',
+            selectedTextClassName
+          )}
+          activeColorClassName={cn('bg-secondary', activeColorClassName)}
+          {...props}
+        />
+        {!!description && <FormDescription>{description}</FormDescription>}
+        <FormMessage />
+      </FormItem>
+    );
+  }
+);
 
-// FormCombobox.displayName = 'FormCombobox';
+FormCombobox.displayName = 'FormCombobox';
 
 /**
  * @prop {children} 
@@ -833,7 +867,7 @@ FormTimePicker.displayName = 'FormTimePicker';
 export {
   Form,
   // FormCheckbox,
-  // FormCombobox,
+  FormCombobox,
   FormDatePicker,
   FormTimePicker,
   FormDescription,

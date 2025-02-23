@@ -13,7 +13,11 @@ export default function Footer() {
     '/events/create-event',
     '/attendees/create-attendee',
   ];
-  const exludedRoutesStart = ['/attendees/details', '/events/edit-event'];
+  const exludedRoutesStart = [
+    '/attendees/details',
+    '/events/edit-event',
+    '/attendees/edit-attendee',
+  ];
 
   const handleScanQrPress = () => {
     requestPermission().then((result) => {

@@ -10,7 +10,8 @@ import LoadingSpinner from '~/components/shared/LoadingSpinner';
 import TicketCard from '~/components/screens/attendees/TicketCard';
 import ViewShot from 'react-native-view-shot';
 import * as Sharing from 'expo-sharing';
-import ShareTicketButton from '~/components/screens/attendees/ShareTicketButton';
+import AttendeeOptions from '~/components/screens/attendees/AttendeeOptions';
+import { Card } from '~/components/ui/card';
 
 const fetchData = async (attendeeId: string) => {
   const attendee = await getAttendeeById(attendeeId);
@@ -50,7 +51,7 @@ export default function AttendeeDetailsScreen() {
 
   useEffect(() => {
     navigation.setOptions({
-      headerRight: () => <ShareTicketButton onPress={handleShareImage} />,
+      headerRight: () => <AttendeeOptions onShare={handleShareImage} />,
     });
   }, [navigation]);
 
@@ -69,9 +70,9 @@ export default function AttendeeDetailsScreen() {
         onCaptureFailure={(error) => console.error('onCaptureFailure', error)}
       >
         <View className="flex-1 items-center justify-around bg-secondary px-4">
-          <View className="bg-white p-5 rounded-2xl">
+          <Card className="bg-white p-6 rounded-2xl">
             <QRCode value={url} />
-          </View>
+          </Card>
           <TicketCard event={event} attendee={attendee} />
         </View>
       </ViewShot>

@@ -99,13 +99,19 @@ export default function RootLayout() {
             <Stack.Screen
               name="attendees/details/[id]"
               options={{
-                title: 'Ticket Details',
+                title: 'Ticket Sale Details',
               }}
             />
             <Stack.Screen
               name="attendees/validate/[id]"
               options={{
                 title: 'Ticket Validation',
+              }}
+            />
+            <Stack.Screen
+              name="attendees/edit-attendee/[id]"
+              options={{
+                title: 'Edit Ticket Sale',
               }}
             />
             <Stack.Screen

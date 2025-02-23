@@ -1,11 +1,10 @@
-import { Link, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { Button } from '~/components/ui/button';
 import { Plus } from '~/lib/icons/Plus';
 
 export default function CreateEventButton() {
   const router = useRouter();
   return (
-    // <Link asChild href="/events/create-event">
     <Button
       size="icon"
       variant="ghost"
@@ -15,6 +14,5 @@ export default function CreateEventButton() {
     >
       <Plus className="text-foreground" size={23} strokeWidth={2} />
     </Button>
-    // </Link>
   );
 }

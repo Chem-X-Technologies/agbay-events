@@ -1,7 +1,8 @@
 import { collection, getDocs, doc, getDoc, addDoc } from 'firebase/firestore';
 import { db } from '../firebase';
-import AgbayEvent, { CreateAgbayEvent } from '../types/agbay-event';
+import AgbayEvent, { CreateAgbayEvent, EditAgbayEvent } from '../types/agbay-event';
 import { sanitizeObject } from '../utils';
+import { updateDoc } from 'firebase/firestore';
 
 export const getEvents = async (): Promise<AgbayEvent[]> => {
   try {
@@ -39,5 +40,16 @@ export const createEvent = async (event: CreateAgbayEvent): Promise<void> => {
   } catch (error) {
     console.error("Error creating event:", error);
     throw new Error("Failed to create event");
+  }
+};
+
+export const editEvent = async (id: string, updatedEvent: EditAgbayEvent): Promise<void> => {
+  try {
+    const eventRef = doc(db, 'events', id);
+    const sanitizedEvent = sanitizeObject(updatedEvent);
+    await updateDoc(eventRef, sanitizedEvent);
+  } catch (error) {
+    console.error("Error updating event:", error);
+    throw new Error("Failed to update event");
   }
 };

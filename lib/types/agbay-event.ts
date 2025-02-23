@@ -18,5 +18,8 @@ interface AgbayEvent extends BaseAgbayEvent {
 // Interface for creating new documents
 interface CreateAgbayEvent extends BaseAgbayEvent { }
 
-export type { AgbayEvent, CreateAgbayEvent };
+// Interface for creating new documents
+interface EditAgbayEvent extends Partial<BaseAgbayEvent> { }
+
+export type { AgbayEvent, CreateAgbayEvent, EditAgbayEvent };
 export default AgbayEvent;

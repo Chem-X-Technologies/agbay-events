@@ -13,6 +13,7 @@ export default function Footer() {
     '/events/create-event',
     '/attendees/create-attendee',
   ];
+  const exludedRoutesStart = ['/attendees/details', '/events/edit-event'];
 
   const handleScanQrPress = () => {
     requestPermission().then((result) => {
@@ -24,7 +25,7 @@ export default function Footer() {
 
   if (
     excludedRoutes.includes(pathname) ||
-    pathname.startsWith('/attendees/details')
+    exludedRoutesStart.some((route) => pathname.startsWith(route))
   ) {
     return null;
   }

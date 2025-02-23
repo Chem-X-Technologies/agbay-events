@@ -17,6 +17,7 @@ import { setAndroidNavigationBar } from '~/lib/android-navigation-bar';
 import CreateEventButton from '~/components/screens/events/CreateEventButton';
 import ReactQueryProvider from '~/components/providers/ReactQueryProvider';
 import Footer from '~/components/shared/Footer';
+import EventOptions from '~/components/screens/events/EventOptions';
 
 const LIGHT_THEME: Theme = {
   ...DefaultTheme,
@@ -78,6 +79,13 @@ export default function RootLayout() {
             name="events/details/[id]"
             options={{
               title: 'Event Details',
+              headerRight: () => <EventOptions />,
+            }}
+          />
+          <Stack.Screen
+            name="events/edit-event/[id]"
+            options={{
+              title: 'Edit Event',
             }}
           />
           <Stack.Screen

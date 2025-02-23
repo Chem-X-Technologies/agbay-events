@@ -320,6 +320,7 @@ const FormInputNumber = React.forwardRef<
             !isNaN(Number(sanitizedValue)) ? Number(sanitizedValue) : undefined
           );
         }}
+        value={value ? String(value) : undefined}
         keyboardType={keyboardType ?? 'numeric'}
         {...props}
       />

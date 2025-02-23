@@ -19,7 +19,7 @@ export default function EventAttendeesListItem({
     <Link
       href={{
         pathname: '/attendees/details/[id]',
-        params: { id: attendee.id, showShareButton: 'false' },
+        params: { id: attendee.id, eventId: attendee.eventId },
       }}
     >
       <View className="p-4 gap-2 bg-background w-full flex-row justify-between items-center">

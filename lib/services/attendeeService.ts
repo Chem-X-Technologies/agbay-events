@@ -6,7 +6,7 @@ import { sanitizeObject } from '../utils';
 export const getAttendees = async (eventId: string): Promise<Attendee[]> => {
   try {
     const attendeesCollection = collection(db, 'attendees');
-    const q = query(attendeesCollection, where("eventId", "==", eventId));
+    const q = query(attendeesCollection, where("eventId", "==", eventId), where("deleted", "==", false));
     const snapshot = await getDocs(q);
     return snapshot.docs.map(doc => ({
       id: doc.id,
@@ -34,7 +34,7 @@ export const getAttendeeById = async (id: string): Promise<Attendee | undefined>
 
 export const createAttendee = async (attendee: CreateAttendee): Promise<Attendee> => {
   try {
-    const sanitizedAttendee = sanitizeObject(attendee);
+    const sanitizedAttendee = sanitizeObject({ ...attendee, deleted: false });
     const attendeesCollection = collection(db, 'attendees');
     const docRef = await addDoc(attendeesCollection, sanitizedAttendee);
     return {
@@ -59,5 +59,15 @@ export const editAttendee = async (id: string, updatedData: EditAttendee): Promi
   } catch (error) {
     console.error("Error updating attendee:", error);
     throw new Error("Failed to update attendee");
+  }
+};
+
+export const deleteAttendee = async (id: string): Promise<void> => {
+  try {
+    const attendeeRef = doc(db, 'attendees', id);
+    await updateDoc(attendeeRef, { deleted: true });
+  } catch (error) {
+    console.error("Error soft deleting attendee:", error);
+    throw new Error("Failed to soft delete attendee");
   }
 };

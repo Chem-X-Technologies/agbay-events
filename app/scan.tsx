@@ -18,8 +18,6 @@ export default function ScanScreen() {
         pathname: '/attendees/validate/[id]',
         params: { id: parsedUrl.path.split('/')[2] },
       });
-    } else {
-      console.log('Invalid deep link:', url);
     }
   };
 

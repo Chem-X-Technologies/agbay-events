@@ -2,16 +2,22 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { toast } from 'sonner-native';
 import DeleteConfirmationDialog from '~/components/shared/DeleteConfirmationDialog';
-import { deleteEvent } from '~/lib/services/eventService';
+import { deleteAttendee } from '~/lib/services/attendeeService';
 
-export default function DeleteEventConfirmationDialog() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+export default function DeleteAttendeeConfirmationDialog() {
+  const { id, eventId } = useLocalSearchParams<{
+    id: string;
+    eventId: string;
+  }>();
   const router = useRouter();
   const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationFn: (id: string) => deleteEvent(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['events'] });
+    mutationFn: (payload: { id: string; eventId: string }) =>
+      deleteAttendee(payload.id).then(() => payload.eventId),
+    onSuccess: (eventId) => {
+      queryClient.invalidateQueries({
+        queryKey: [`attendees?eventId=${eventId}`],
+      });
       toast.success('Event deleted successfully!');
       router.back();
     },
@@ -21,13 +27,13 @@ export default function DeleteEventConfirmationDialog() {
   });
 
   const handleConfirm = () => {
-    mutation.mutate(id);
+    mutation.mutate({ id, eventId });
   };
 
   return (
     <DeleteConfirmationDialog
-      title="Delete Event"
-      description="Are you sure you want to delete this event?"
+      title="Delete Ticket Sale"
+      description="Are you sure you want to delete this ticket sale?"
       loading={mutation.isPending}
       onConfirm={handleConfirm}
     />

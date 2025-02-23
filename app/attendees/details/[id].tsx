@@ -12,6 +12,7 @@ import ViewShot from 'react-native-view-shot';
 import * as Sharing from 'expo-sharing';
 import AttendeeOptions from '~/components/screens/attendees/AttendeeOptions';
 import { Card } from '~/components/ui/card';
+import DeleteAttendeeConfirmationDialog from '~/components/screens/attendees/DeleteAttendeeConfirmationDialog';
 
 const fetchData = async (attendeeId: string) => {
   const attendee = await getAttendeeById(attendeeId);
@@ -75,6 +76,7 @@ export default function AttendeeDetailsScreen() {
           </Card>
           <TicketCard event={event} attendee={attendee} />
         </View>
+        <DeleteAttendeeConfirmationDialog />
       </ViewShot>
     </>
   );

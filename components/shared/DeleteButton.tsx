@@ -2,7 +2,7 @@ import { useRouter } from 'expo-router';
 import { DropdownMenuItem } from '~/components/ui/dropdown-menu';
 import { Trash2 } from '~/lib/icons/Trash2';
 
-export default function DeleteEventButton() {
+export default function DeleteButton() {
   const router = useRouter();
 
   const showDeleteConfirmation = () => {

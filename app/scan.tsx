@@ -10,13 +10,10 @@ export default function ScanScreen() {
     const url = scanResult.data;
     const parsedUrl = Linking.parse(url);
 
-    if (
-      parsedUrl.scheme === 'agbay-events' &&
-      parsedUrl.path?.startsWith('attendees/validate')
-    ) {
+    if (parsedUrl.scheme === 'agbay-events') {
       router.replace({
         pathname: '/attendees/validate/[id]',
-        params: { id: parsedUrl.path.split('/')[2] },
+        params: { id: (parsedUrl.queryParams?.validate as string) ?? '' },
       });
     }
   };

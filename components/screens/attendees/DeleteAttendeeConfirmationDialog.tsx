@@ -18,11 +18,11 @@ export default function DeleteAttendeeConfirmationDialog() {
       queryClient.invalidateQueries({
         queryKey: [`attendees?eventId=${eventId}`],
       });
-      toast.success('Event deleted successfully!');
+      toast.success('Ticket sale deleted successfully!');
       router.back();
     },
     onError: (error) => {
-      toast.error(`Failed to delete event: ${error.message}`);
+      toast.error(`Failed to delete ticket sale: ${error.message}`);
     },
   });
 

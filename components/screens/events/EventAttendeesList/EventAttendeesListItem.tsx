@@ -22,7 +22,7 @@ export default function EventAttendeesListItem({
         params: { id: attendee.id, eventId: attendee.eventId },
       }}
     >
-      <View className="p-4 gap-2 bg-background w-full flex-row justify-between items-center">
+      <View className="p-4 gap-2 w-full flex-row justify-between items-center">
         <View>
           <Large>{attendee.name}</Large>
           <View className="flex-row gap-1 items-center">

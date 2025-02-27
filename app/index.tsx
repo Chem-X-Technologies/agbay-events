@@ -10,6 +10,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import { Large } from '~/components/ui/typography';
 import { useCallback } from 'react';
+import Footer from '~/components/shared/Footer';
 
 export default function EventsScreen() {
   const { validate } = useLocalSearchParams<{ validate: string }>();
@@ -77,6 +78,7 @@ export default function EventsScreen() {
           </Large>
         </View>
       )}
+      <Footer />
     </View>
   );
 }

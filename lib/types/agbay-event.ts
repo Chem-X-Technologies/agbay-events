@@ -1,3 +1,5 @@
+import Poster from "./poster";
+
 // Base interface without ID
 interface BaseAgbayEvent {
   name: string;
@@ -8,6 +10,7 @@ interface BaseAgbayEvent {
   description?: string;
   contactPerson?: string;
   contactNumber?: string;
+  poster?: Poster;
 }
 
 // Interface with ID for fetched documents

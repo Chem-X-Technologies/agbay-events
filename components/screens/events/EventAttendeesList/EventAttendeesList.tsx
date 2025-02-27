@@ -22,10 +22,11 @@ export default function EventAttendeesList() {
   data?.sort((a, b) => a.name.localeCompare(b.name));
 
   return (
-    <View className="flex-1 w-full">
+    <View className="flex-1 w-full bg-secondary rounded-2xl">
       <FlashListHeader
         text="Ticket Sales"
         headerRight={<CreateAttendeeButton />}
+        className="bg-background rounded-t-2xl"
       />
       <FlashList
         data={data}

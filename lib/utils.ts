@@ -65,3 +65,14 @@ export const sanitizeObject = (obj: Record<string, any>): Record<string, any> =>
     return acc;
   }, {} as Record<string, any>);
 };
+
+export const uriToBlob = async (uri: string): Promise<Blob> => {
+  try {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    return blob as Blob;
+  } catch (error) {
+    console.error('Error converting URI to blob:', error);
+    throw error;
+  }
+};

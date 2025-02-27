@@ -16,7 +16,6 @@ import { PortalHost } from '@rn-primitives/portal';
 import { setAndroidNavigationBar } from '~/lib/android-navigation-bar';
 import CreateEventButton from '~/components/screens/events/CreateEventButton';
 import ReactQueryProvider from '~/components/providers/ReactQueryProvider';
-import Footer from '~/components/shared/Footer';
 import EventOptions from '~/components/screens/events/EventOptions';
 import ToasterProvider from '~/components/providers/ToasterProvider';
 
@@ -121,7 +120,6 @@ export default function RootLayout() {
               }}
             />
           </Stack>
-          <Footer />
         </ToasterProvider>
       </ReactQueryProvider>
       <PortalHost />

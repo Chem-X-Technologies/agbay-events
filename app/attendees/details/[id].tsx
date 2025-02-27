@@ -13,6 +13,10 @@ import * as Sharing from 'expo-sharing';
 import AttendeeOptions from '~/components/screens/attendees/AttendeeOptions';
 import { Card } from '~/components/ui/card';
 import DeleteAttendeeConfirmationDialog from '~/components/screens/attendees/DeleteAttendeeConfirmationDialog';
+import AgbayEvent from '~/lib/types/agbay-event';
+import Attendee from '~/lib/types/attendee';
+import { ImageBackground } from 'expo-image';
+import { cn } from '~/lib/utils';
 
 const fetchData = async (attendeeId: string) => {
   const attendee = await getAttendeeById(attendeeId);
@@ -70,14 +74,49 @@ export default function AttendeeDetailsScreen() {
         style={{ flex: 1 }}
         onCaptureFailure={(error) => console.error('onCaptureFailure', error)}
       >
-        <View className="flex-1 items-center justify-around bg-secondary px-4">
-          <Card className="bg-white p-6 rounded-2xl">
-            <QRCode value={url} />
-          </Card>
-          <TicketCard event={event} attendee={attendee} />
-        </View>
+        {!!event?.poster ? (
+          <ImageBackground
+            source={{ uri: event.poster?.url }}
+            contentFit="cover"
+            style={{ flex: 1 }}
+          >
+            <AttendeeDetailsScreenContent
+              url={url}
+              event={event}
+              attendee={attendee}
+            />
+          </ImageBackground>
+        ) : (
+          <AttendeeDetailsScreenContent
+            url={url}
+            event={event}
+            attendee={attendee}
+            className="bg-secondary"
+          />
+        )}
         <DeleteAttendeeConfirmationDialog />
       </ViewShot>
     </>
   );
 }
+
+const AttendeeDetailsScreenContent = ({
+  url,
+  event,
+  attendee,
+  className,
+}: {
+  url: string;
+  event?: AgbayEvent;
+  attendee?: Attendee;
+  className?: string;
+}) => {
+  return (
+    <View className={cn('flex-1 items-center justify-around px-4', className)}>
+      <Card className="bg-white p-6 rounded-2xl">
+        <QRCode value={url} />
+      </Card>
+      <TicketCard event={event} attendee={attendee} />
+    </View>
+  );
+};

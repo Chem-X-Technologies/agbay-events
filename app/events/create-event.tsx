@@ -6,6 +6,11 @@ import EventForm, {
   EventFormType,
 } from '~/components/screens/events/EventForm';
 import { toast } from 'sonner-native';
+import { uploadFile } from '~/lib/services/storageService';
+import { useState } from 'react';
+import * as Crypto from 'expo-crypto';
+import Poster from '~/lib/types/poster';
+import { uriToBlob } from '~/lib/utils';
 
 export default function CreateEventScreen() {
   const router = useRouter();
@@ -21,8 +26,9 @@ export default function CreateEventScreen() {
       toast.error(`Failed to create event: ${error.message}`);
     },
   });
+  const [uploading, setUploading] = useState(false);
 
-  const handleSubmit = (values: EventFormType) => {
+  const handleSubmit = (values: EventFormType, poster?: Poster) => {
     const event: CreateAgbayEvent = {
       name: values.name,
       description: values.description,
@@ -34,8 +40,29 @@ export default function CreateEventScreen() {
       contactNumber: values.contactNumber,
     };
 
-    mutation.mutate(event);
+    if (poster) {
+      setUploading(true);
+      const posterId = Crypto.randomUUID();
+
+      uriToBlob(poster.url).then((blob) => {
+        uploadFile(posterId, blob)
+          .then((posterUrl) => {
+            event.poster = {
+              id: posterId,
+              url: posterUrl,
+              fileName: poster.fileName,
+            };
+            mutation.mutate(event);
+          })
+          .catch(() => toast.error('Failed to upload poster'))
+          .finally(() => setUploading(false));
+      });
+    } else {
+      mutation.mutate(event);
+    }
   };
 
-  return <EventForm onSubmit={handleSubmit} loading={mutation.isPending} />;
+  const loading = mutation.isPending || uploading;
+
+  return <EventForm onSubmit={handleSubmit} loading={loading} />;
 }

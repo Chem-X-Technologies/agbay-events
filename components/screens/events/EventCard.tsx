@@ -8,27 +8,16 @@ import {
 } from '~/components/ui/card';
 import { Large, Muted } from '~/components/ui/typography';
 import { formatDate, formatPeso, formatTime } from '~/lib/utils';
-import { useLocalSearchParams } from 'expo-router';
-import { useQuery } from '@tanstack/react-query';
-import { getEventById } from '~/lib/services/eventService';
-import LoadingSpinner from '~/components/shared/LoadingSpinner';
+import AgbayEvent from '~/lib/types/agbay-event';
 
-export default function EventCard() {
-  const { id } = useLocalSearchParams<{ id: string }>();
-  const { data, isFetching } = useQuery({
-    queryKey: [`events/${id}`],
-    queryFn: () => getEventById(id),
-  });
-
-  if (isFetching) return <LoadingSpinner />;
-
+export default function EventCard({ event }: { event: AgbayEvent }) {
   return (
     <Card className="w-full p-2 rounded-2xl">
       <CardHeader className="items-center">
-        <CardTitle className="text-center">{data?.name}</CardTitle>
-        {!!data?.description && (
+        <CardTitle className="text-center">{event?.name}</CardTitle>
+        {!!event?.description && (
           <CardDescription className="pt-2 text-base font-semibold">
-            {data.description}
+            {event.description}
           </CardDescription>
         )}
       </CardHeader>
@@ -36,34 +25,34 @@ export default function EventCard() {
         <View className="flex-row gap-4">
           <View className="flex-1">
             <Muted>Date</Muted>
-            <Large>{formatDate(data?.date ?? '')}</Large>
+            <Large>{formatDate(event?.date ?? '')}</Large>
           </View>
           <View className="flex-1">
             <Muted>Time</Muted>
-            <Large>{formatTime(data?.time ?? '')}</Large>
+            <Large>{formatTime(event?.time ?? '')}</Large>
           </View>
         </View>
         <View className="flex-row gap-4">
           <View className="flex-1">
             <Muted>Venue</Muted>
-            <Large>{data?.venue}</Large>
+            <Large>{event?.venue}</Large>
           </View>
           <View className="flex-1">
             <Muted>Ticket Price</Muted>
-            <Large>{formatPeso(data?.ticketPrice ?? 0)}</Large>
+            <Large>{formatPeso(event?.ticketPrice ?? 0)}</Large>
           </View>
         </View>
         <View className="flex-row gap-4 flex-wrap">
-          {!!data?.contactPerson && (
+          {!!event?.contactPerson && (
             <View className="flex-1">
               <Muted>Contact Person</Muted>
-              <Large>{data?.contactPerson ?? '-'}</Large>
+              <Large>{event?.contactPerson ?? '-'}</Large>
             </View>
           )}
-          {!!data?.contactNumber && (
+          {!!event?.contactNumber && (
             <View className="flex-1">
               <Muted>Contact Number</Muted>
-              <Large>{data?.contactNumber ?? '-'}</Large>
+              <Large>{event?.contactNumber ?? '-'}</Large>
             </View>
           )}
         </View>

@@ -13,11 +13,10 @@ export default function ReactQueryProvider({
 }: {
   children: ReactNode;
 }) {
-  useEffect(() => {
-    const subscription = AppState.addEventListener('change', onAppStateChange);
-
-    return () => subscription.remove();
-  }, []);
+  // useEffect(() => {
+  //   const subscription = AppState.addEventListener('change', onAppStateChange);
+  //   return () => subscription.remove();
+  // }, []);
 
   return (
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>

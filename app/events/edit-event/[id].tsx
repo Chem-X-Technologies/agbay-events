@@ -7,6 +7,11 @@ import EventForm, {
 } from '~/components/screens/events/EventForm';
 import LoadingSpinner from '~/components/shared/LoadingSpinner';
 import { toast } from 'sonner-native';
+import { uriToBlob } from '~/lib/utils';
+import { uploadFile } from '~/lib/services/storageService';
+import { useState } from 'react';
+import * as Crypto from 'expo-crypto';
+import Poster from '~/lib/types/poster';
 
 export default function EditEventScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -25,13 +30,14 @@ export default function EditEventScreen() {
       toast.error(`Failed to update event: ${error.message}`);
     },
   });
+  const [uploading, setUploading] = useState(false);
 
   const { data, isFetching } = useQuery({
     queryKey: [`edit-event/${id}`],
     queryFn: () => getEventById(id),
   });
 
-  const handleSubmit = (values: EventFormType) => {
+  const handleSubmit = (values: EventFormType, poster?: Poster) => {
     const event: EditAgbayEvent = {
       name: values.name,
       description: values.description,
@@ -41,18 +47,41 @@ export default function EditEventScreen() {
       ticketPrice: values.ticketPrice,
       contactPerson: values.contactPerson,
       contactNumber: values.contactNumber,
+      poster,
     };
 
-    mutation.mutate({ id, event });
+    if (poster && !poster.id) {
+      setUploading(true);
+      const posterId = Crypto.randomUUID();
+
+      uriToBlob(poster.url).then((blob) => {
+        uploadFile(posterId, blob)
+          .then((posterUrl) => {
+            event.poster = {
+              id: posterId,
+              url: posterUrl,
+              fileName: poster.fileName,
+            };
+            mutation.mutate({ id, event });
+          })
+          .catch(() => toast.error('Failed to upload poster'))
+          .finally(() => setUploading(false));
+      });
+    } else {
+      mutation.mutate({ id, event });
+    }
   };
 
   if (isFetching) return <LoadingSpinner />;
 
+  const loading = mutation.isPending || uploading;
+
   return (
     <EventForm
       onSubmit={handleSubmit}
-      loading={mutation.isPending}
+      loading={loading}
       defaultValue={data}
+      poster={data?.poster}
     />
   );
 }

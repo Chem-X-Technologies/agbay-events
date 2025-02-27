@@ -2,7 +2,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { toast } from 'sonner-native';
 import DeleteConfirmationDialog from '~/components/shared/DeleteConfirmationDialog';
-import { deleteEvent } from '~/lib/services/eventService';
+import { deleteEvent, getEventById } from '~/lib/services/eventService';
+import { deleteFile } from '~/lib/services/storageService';
 
 export default function DeleteEventConfirmationDialog() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -21,7 +22,14 @@ export default function DeleteEventConfirmationDialog() {
   });
 
   const handleConfirm = () => {
-    mutation.mutate(id);
+    getEventById(id).then((event) => {
+      if (!event) return;
+      if (event.poster) {
+        deleteFile(event.poster.id).then(() => mutation.mutate(id));
+      } else {
+        mutation.mutate(id);
+      }
+    });
   };
 
   return (

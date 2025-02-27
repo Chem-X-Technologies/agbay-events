@@ -10,8 +10,14 @@ import {
   FormField,
   FormInput,
   FormInputNumber,
+  FormLabel,
   FormTimePicker,
 } from '~/components/ui/form';
+import { useState } from 'react';
+import * as ImagePicker from 'expo-image-picker';
+import { Image } from 'expo-image';
+import { Muted } from '~/components/ui/typography';
+import Poster from '~/lib/types/poster';
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -34,15 +40,34 @@ export default function EventForm({
   onSubmit,
   loading,
   defaultValue,
+  poster: posterProp,
 }: {
-  onSubmit: (values: EventFormType) => void;
+  onSubmit: (values: EventFormType, poster?: Poster) => void;
   loading: boolean;
   defaultValue?: EventFormType;
+  poster?: Poster;
 }) {
   const form = useForm<EventFormType>({
     resolver: zodResolver(formSchema),
     defaultValues: defaultValue,
   });
+  const [poster, setPoster] = useState(posterProp);
+
+  const pickPoster = () => {
+    ImagePicker.launchImageLibraryAsync({
+      quality: 1,
+      allowsMultipleSelection: false,
+    }).then((result) => {
+      if (!result.canceled) {
+        const asset = result.assets[0];
+        setPoster({
+          id: '',
+          url: asset.uri,
+          fileName: asset.fileName ?? '',
+        });
+      }
+    });
+  };
 
   return (
     <ScrollView
@@ -101,7 +126,28 @@ export default function EventForm({
               <FormInput label="Contact Number" {...field} />
             )}
           />
-          <Button onPress={form.handleSubmit(onSubmit)} loading={loading}>
+          <View className="flex-1">
+            <FormLabel>Poster</FormLabel>
+            {!!poster && (
+              <>
+                <Image
+                  source={poster.url}
+                  style={{
+                    height: 300,
+                  }}
+                  contentFit="contain"
+                />
+                <Muted className="text-center mb-2">({poster.fileName})</Muted>
+              </>
+            )}
+            <Button variant="outline" onPress={pickPoster}>
+              <Text>Upload Image</Text>
+            </Button>
+          </View>
+          <Button
+            onPress={form.handleSubmit((data) => onSubmit(data, poster))}
+            loading={loading}
+          >
             <Text>Submit</Text>
           </Button>
         </View>

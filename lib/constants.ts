@@ -1,3 +1,5 @@
+import { AttendeeStatus } from "./types/attendee";
+
 export const NAV_THEME = {
   light: {
     background: 'hsl(0 0% 100%)', // background
@@ -16,3 +18,18 @@ export const NAV_THEME = {
     text: 'hsl(0 0% 98%)', // foreground
   },
 };
+
+export const ATTENDEE_STATUS_LIST = [
+  {
+    label: AttendeeStatus.ForAttendance,
+    value: AttendeeStatus.ForAttendance,
+  },
+  {
+    label: AttendeeStatus.Attended,
+    value: AttendeeStatus.Attended,
+  },
+  {
+    label: AttendeeStatus.NoShow,
+    value: AttendeeStatus.NoShow,
+  },
+]

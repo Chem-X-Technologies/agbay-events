@@ -2,15 +2,16 @@ import { Separator } from '@rn-primitives/dropdown-menu';
 import { FlashList } from '@shopify/flash-list';
 import { useQuery } from '@tanstack/react-query';
 import { useLocalSearchParams, useNavigation } from 'expo-router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import AttendanceCounter from '~/components/screens/attendees/AttendanceCounter';
+import AttendeesFilter from '~/components/screens/attendees/AttendeesFilter';
 import CreateAttendeeButton from '~/components/screens/events/EventAttendeesList/CreateAttendeeButton';
 import EventAttendeesListItem from '~/components/screens/events/EventAttendeesList/EventAttendeesListItem';
 import LoadingSpinner from '~/components/shared/LoadingSpinner';
 import { Large } from '~/components/ui/typography';
 import { getAttendees } from '~/lib/services/attendeeService';
-import { AttendeeStatus } from '~/lib/types/attendee';
+import Attendee, { AttendeeStatus } from '~/lib/types/attendee';
 
 export default function AttendeesScreen() {
   const { eventId } = useLocalSearchParams<{ eventId: string }>();
@@ -19,6 +20,7 @@ export default function AttendeesScreen() {
     queryKey: [`attendees?eventId=${eventId}`],
     queryFn: () => getAttendees(eventId),
   });
+  const [attendees, setAttendees] = useState<Attendee[]>([]);
 
   useEffect(() => {
     if (!data) return;
@@ -40,6 +42,8 @@ export default function AttendeesScreen() {
         </View>
       ),
     });
+
+    setAttendees(data);
   }, [data]);
 
   if (isFetching) return <LoadingSpinner />;
@@ -49,12 +53,17 @@ export default function AttendeesScreen() {
   return (
     <View className="flex-1 bg-secondary pb-4">
       {!!data?.length ? (
-        <FlashList
-          data={data}
-          renderItem={({ item }) => <EventAttendeesListItem attendee={item} />}
-          ItemSeparatorComponent={() => <Separator />}
-          estimatedItemSize={59}
-        />
+        <>
+          <AttendeesFilter data={data} setAttendees={setAttendees} />
+          <FlashList
+            data={attendees}
+            renderItem={({ item }) => (
+              <EventAttendeesListItem attendee={item} />
+            )}
+            ItemSeparatorComponent={() => <Separator />}
+            estimatedItemSize={59}
+          />
+        </>
       ) : (
         <View className="flex-1 items-center justify-center p-6">
           <Large className="text-muted-foreground font-normal">

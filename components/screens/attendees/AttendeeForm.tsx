@@ -12,6 +12,7 @@ import { useForm } from 'react-hook-form';
 import { Button } from '~/components/ui/button';
 import { Text } from '~/components/ui/text';
 import { AttendeeStatus } from '~/lib/types/attendee';
+import { ATTENDEE_STATUS_LIST } from '~/lib/constants';
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -70,20 +71,7 @@ export default function AttendeeForm({
                   label="Status"
                   labelField="label"
                   valueField="value"
-                  data={[
-                    {
-                      label: AttendeeStatus.ForAttendance,
-                      value: AttendeeStatus.ForAttendance,
-                    },
-                    {
-                      label: AttendeeStatus.Attended,
-                      value: AttendeeStatus.Attended,
-                    },
-                    {
-                      label: AttendeeStatus.NoShow,
-                      value: AttendeeStatus.NoShow,
-                    },
-                  ]}
+                  data={ATTENDEE_STATUS_LIST}
                   {...field}
                 />
               )}

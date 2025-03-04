@@ -28,28 +28,39 @@ export default function EventDetailsScreen() {
       contentFit="cover"
       style={{ flex: 1 }}
     >
-      <EventDetailsScreenContent data={data} />
+      <EventDetailsScreenContent eventId={id} data={data} />
     </ImageBackground>
   ) : (
-    <EventDetailsScreenContent data={data} className="bg-secondary" />
+    <EventDetailsScreenContent
+      eventId={id}
+      data={data}
+      className="bg-secondary"
+    />
   );
 }
 
 const EventDetailsScreenContent = ({
+  eventId,
   data,
   className,
 }: {
+  eventId: string;
   data?: AgbayEvent;
   className?: string;
 }) => {
   return (
-    <View
-      className={cn('flex-1 p-4 items-center gap-6 justify-between', className)}
-    >
-      {!!data && <EventCard event={data} />}
-      <EventAttendeesList />
+    <>
+      <View
+        className={cn(
+          'flex-1 p-4 items-center gap-6 justify-between',
+          className
+        )}
+      >
+        {!!data && <EventCard event={data} />}
+        <EventAttendeesList eventId={eventId} />
+        <Footer />
+      </View>
       <DeleteEventConfirmationDialog />
-      <Footer />
-    </View>
+    </>
   );
 };

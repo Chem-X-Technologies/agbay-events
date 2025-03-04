@@ -50,7 +50,7 @@ export default function EventsScreen() {
     .filter((item) => item !== null) as number[];
 
   return (
-    <View className="flex-1 bg-secondary">
+    <View className="flex-1 bg-secondary pb-4">
       {events.length > 0 ? (
         <FlashList
           data={events}

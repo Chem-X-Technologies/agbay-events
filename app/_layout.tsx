@@ -90,6 +90,12 @@ export default function RootLayout() {
               }}
             />
             <Stack.Screen
+              name="attendees/index"
+              options={{
+                title: 'Ticket Sales',
+              }}
+            />
+            <Stack.Screen
               name="attendees/create-attendee"
               options={{
                 title: 'Log Ticket Sale',

@@ -34,7 +34,7 @@ export default function AttendeeMetadataInput({
             name={`metadata.${index}.key`}
             render={({ field }) => (
               <FormInput
-                label="Label *"
+                placeholder="Label"
                 containerClassName="flex-1"
                 {...field}
               />
@@ -45,7 +45,7 @@ export default function AttendeeMetadataInput({
             name={`metadata.${index}.value`}
             render={({ field }) => (
               <FormInput
-                label="Value *"
+                placeholder="Value"
                 containerClassName="flex-1"
                 {...field}
               />

@@ -32,7 +32,7 @@ export default function EventAttendeesList({ eventId }: { eventId: string }) {
     data?.reduce((acc, att) => acc + att.ticketCount, 0) ?? 0;
 
   return (
-    <View className="flex-1 w-full bg-secondary rounded-2xl">
+    <View className="flex-1 w-full bg-secondary rounded-2xl border border-background">
       <FlashListHeader
         text="Ticket Sales"
         headerRight={

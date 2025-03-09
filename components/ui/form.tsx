@@ -193,12 +193,13 @@ type FormItemProps<T extends React.ElementType<any>, U> = Override<
 > & {
   label?: string;
   description?: string;
+  containerClassName?: string;
 };
 
 const FormInput = React.forwardRef<
   React.ElementRef<typeof Input>,
   FormItemProps<typeof Input, string | undefined>
->(({ label, description, onChange, ...props }, ref) => {
+>(({ label, description, containerClassName, onChange, ...props }, ref) => {
   const inputRef = React.useRef<React.ComponentRef<typeof Input>>(null);
   const {
     error,
@@ -230,7 +231,7 @@ const FormInput = React.forwardRef<
   }
 
   return (
-    <FormItem>
+    <FormItem className={containerClassName}>
       {!!label && (
         <FormLabel nativeID={formItemNativeID} onPress={handleOnLabelPress}>
           {label}

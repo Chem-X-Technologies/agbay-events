@@ -39,6 +39,12 @@ export default function EditAttendeeScreen() {
       name: values.name,
       ticketCount: values.ticketCount,
       status: values.status as AttendeeStatus,
+      metadata: values.metadata
+        .filter((md) => !md.isDeleted)
+        .map((md) => ({
+          key: md.key,
+          value: md.value,
+        })),
     };
 
     mutation.mutate({ id, attendee });

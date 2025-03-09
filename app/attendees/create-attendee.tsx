@@ -34,6 +34,12 @@ export default function CreateAttendeeScreen() {
       ticketCount: values.ticketCount,
       status: values.status as AttendeeStatus,
       eventId: eventId as string,
+      metadata: values.metadata
+        .filter((md) => !md.isDeleted)
+        .map((md) => ({
+          key: md.key,
+          value: md.value,
+        })),
     };
 
     mutation.mutate(attendee);

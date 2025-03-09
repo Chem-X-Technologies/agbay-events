@@ -4,12 +4,18 @@ export enum AttendeeStatus {
   NoShow = 'No Show',
 }
 
+interface Metadata {
+  key: string;
+  value: string;
+}
+
 // Base interface without ID
 interface BaseAttendee {
   name: string;
   ticketCount: number;
   status: AttendeeStatus;
   eventId: string;
+  metadata: Metadata[];
 }
 
 // Interface with ID for fetched documents

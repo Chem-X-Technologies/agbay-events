@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import {
   Form,
   FormCombobox,
@@ -13,6 +13,8 @@ import { Button } from '~/components/ui/button';
 import { Text } from '~/components/ui/text';
 import { AttendeeStatus } from '~/lib/types/attendee';
 import { ATTENDEE_STATUS_LIST } from '~/lib/constants';
+import { useState } from 'react';
+import AttendeeMetadataInput from './AttendeeMetadataInput';
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -22,6 +24,19 @@ const formSchema = z.object({
     message: 'Please enter the ticket count',
   }),
   status: z.string().default(AttendeeStatus.ForAttendance),
+  metadata: z
+    .array(
+      z.object({
+        key: z.string().min(1, {
+          message: 'Please enter the field label',
+        }),
+        value: z.string().min(1, {
+          message: 'Please enter the field value',
+        }),
+        isDeleted: z.boolean().optional(),
+      })
+    )
+    .default([]),
 });
 
 export type AttendeeFormType = z.infer<typeof formSchema>;
@@ -39,9 +54,16 @@ export default function AttendeeForm({
     resolver: zodResolver(formSchema),
     defaultValues: defaultValue,
   });
+  const [metadataCount, setMetadataCount] = useState(
+    defaultValue?.metadata.length ?? 0
+  );
+
+  const handleAddMetadata = () => {
+    setMetadataCount((count) => count + 1);
+  };
 
   return (
-    <View className="flex-1 p-6 mx-auto w-full max-w-xl bg-secondary">
+    <ScrollView className="p-6 mx-auto w-full max-w-xl bg-secondary">
       <Form {...form}>
         <View className="gap-7">
           <FormField
@@ -77,11 +99,21 @@ export default function AttendeeForm({
               )}
             />
           )}
+          {Array.from({ length: metadataCount }).map((_, index) => (
+            <AttendeeMetadataInput
+              key={index}
+              control={form.control}
+              index={index}
+            />
+          ))}
+          <Button variant="link" onPress={handleAddMetadata}>
+            <Text>Add custom field</Text>
+          </Button>
           <Button onPress={form.handleSubmit(onSubmit)} loading={loading}>
             <Text>Submit</Text>
           </Button>
         </View>
       </Form>
-    </View>
+    </ScrollView>
   );
 }

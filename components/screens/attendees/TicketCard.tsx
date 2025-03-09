@@ -49,7 +49,7 @@ export default function TicketCard({
           </Large>
           <View>
             <Large className="text-muted-foreground">
-              <Ticket className="text-muted-foreground" size={15} /> Ticket/s
+              <Ticket className="text-muted-foreground" size={15} /> Ticket(s)
             </Large>
             <Large>{`${formatPeso(event?.ticketPrice ?? 0)} x ${
               attendee?.ticketCount

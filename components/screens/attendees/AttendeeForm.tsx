@@ -15,6 +15,7 @@ import { AttendeeStatus } from '~/lib/types/attendee';
 import { ATTENDEE_STATUS_LIST } from '~/lib/constants';
 import { useState } from 'react';
 import AttendeeMetadataInput from './AttendeeMetadataInput';
+import { P } from '~/components/ui/typography';
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -55,11 +56,16 @@ export default function AttendeeForm({
     defaultValues: defaultValue,
   });
   const [metadataCount, setMetadataCount] = useState(
-    defaultValue?.metadata.length ?? 0
+    defaultValue?.metadata?.length ?? 0
   );
+  const [deletedMetadataCount, setDeletedMetadataCount] = useState(0);
 
   const handleAddMetadata = () => {
     setMetadataCount((count) => count + 1);
+  };
+
+  const handleDeleteMetadata = () => {
+    setDeletedMetadataCount((count) => count + 1);
   };
 
   return (
@@ -99,11 +105,15 @@ export default function AttendeeForm({
               )}
             />
           )}
+          {metadataCount !== deletedMetadataCount && (
+            <P className="font-bold">Custom Fields</P>
+          )}
           {Array.from({ length: metadataCount }).map((_, index) => (
             <AttendeeMetadataInput
               key={index}
               control={form.control}
               index={index}
+              onDelete={handleDeleteMetadata}
             />
           ))}
           <Button variant="link" onPress={handleAddMetadata}>

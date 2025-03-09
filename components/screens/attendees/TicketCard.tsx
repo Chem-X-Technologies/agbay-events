@@ -1,7 +1,7 @@
 import { View } from 'react-native';
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card';
 import { Separator } from '~/components/ui/separator';
-import { Large } from '~/components/ui/typography';
+import { Large, P } from '~/components/ui/typography';
 import { Calendar } from '~/lib/icons/Calendar';
 import { Clock } from '~/lib/icons/Clock';
 import { MapPin } from '~/lib/icons/MapPin';
@@ -26,8 +26,8 @@ export default function TicketCard({
           {event?.name}
         </CardDescription> */}
       </CardHeader>
-      <CardContent className="gap-6">
-        <View className="gap-4">
+      <CardContent className="gap-4">
+        <View className="flex-row justify-between gap-4 flex-wrap">
           <View>
             <Large className="text-muted-foreground">
               <Calendar className="text-muted-foreground" size={15} />
@@ -37,17 +37,16 @@ export default function TicketCard({
               <Clock className="text-muted-foreground" size={15} />
               {` ${event?.time ? formatTime(event?.time) : ''}`}
             </Large>
+            <Large className="text-muted-foreground">
+              <MapPin className="text-muted-foreground" size={15} />
+              {` ${event?.venue}`}
+            </Large>
           </View>
-          <Large className="text-muted-foreground">
-            <MapPin className="text-muted-foreground" size={15} />
-            {` ${event?.venue}`}
-          </Large>
-          <Separator />
-          <Large className="text-muted-foreground">
-            <User className="text-muted-foreground" size={15} />
-            {` ${attendee?.name}`}
-          </Large>
           <View>
+            <Large className="text-muted-foreground">
+              <User className="text-muted-foreground" size={15} />
+              {` ${attendee?.name}`}
+            </Large>
             <Large className="text-muted-foreground">
               <Ticket className="text-muted-foreground" size={15} /> Ticket(s)
             </Large>
@@ -56,6 +55,21 @@ export default function TicketCard({
             }`}</Large>
           </View>
         </View>
+        {!!attendee?.metadata?.length && (
+          <>
+            <Separator />
+            <View>
+              {attendee.metadata.map((meta, index) => (
+                <View className="flex-row gap-1" key={index}>
+                  <P className="text-muted-foreground">{meta.key}</P>
+                  <P className="font-bold text-muted-foreground">
+                    {meta.value}
+                  </P>
+                </View>
+              ))}
+            </View>
+          </>
+        )}
       </CardContent>
     </Card>
   );

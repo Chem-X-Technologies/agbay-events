@@ -10,9 +10,11 @@ import { cn } from '~/lib/utils';
 export default function AttendeeMetadataInput({
   control,
   index,
+  onDelete,
 }: {
   control: Control<AttendeeFormType>;
   index: number;
+  onDelete: () => void;
 }) {
   const [isDeleted, setIsDeleted] = useState(false);
 
@@ -58,6 +60,7 @@ export default function AttendeeMetadataInput({
                 isDeleted: true,
               });
               setIsDeleted(true);
+              onDelete();
             }}
           >
             <X size={15} className="text-foreground" />
